@@ -18,7 +18,6 @@ class Rover:
         start_time = perf_counter()
 
         while perf_counter() - start_time <= duration:
-            rospy.loginfo(time() - start_time)
             pub.publish(twist)
 
     def move_forward(self, velocity, duration):
