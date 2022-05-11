@@ -1,6 +1,6 @@
 touch Dockerfile
-echo "FROM ros:melodic" >> Dockerfile
-echo "ENV ROS_DISTO=melodic" >> Dockerfile
+echo "FROM ros:noetic" >> Dockerfile
+echo "ENV ROS_DISTO=noetic" >> Dockerfile
 echo "RUN mkdir -p /files/" >> Dockerfile
 echo "COPY . /files/" >> Dockerfile
 echo "SHELL [\"bin/bash\", \"-c\"]" >> Dockerfile
