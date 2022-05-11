@@ -37,3 +37,4 @@ echo "                - subnet: 172.20.0.0/16" >> docker-compose.yaml
 mv docker-compose.yaml Dockerfile ..
 cd .. && docker build -t ros_image:1.0 . && docker-compose -f docker-compose.yaml up -d
 
+
