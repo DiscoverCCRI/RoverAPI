@@ -1,7 +1,7 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 import rospy
-from time import perf_counter 
+from time import time 
 from geometry_msgs.msg import Twist
 from math import radians
 
@@ -39,11 +39,11 @@ class Rover:
         (deg/s) for a given number of seconds. The max velocity is ~45 deg/s.
     """
 
-    def __init__(self, name: str):
+    def __init__(self, name):
         self.name = name
 
-    def drive(self, linear_vel: float, angular_vel: float, duration: float):
-        rospy.init_node(name + "_rover")
+    def drive(self, linear_vel, angular_vel, duration):
+        rospy.init_node(self.name + "_rover_driver")
         twist = Twist()
         pub = rospy.Publisher("/cmd_vel", Twist, queue_size=20)
         angular_in_rad = radians(angular_vel)
@@ -52,20 +52,21 @@ class Rover:
         twist.linear.x = linear_vel
         twist.angular.z = angular_in_rad
         
-        start_time = perf_counter()
+        start_time = time()
         
         # runs until duration has been reached
-        while perf_counter() - start_time <= duration:
+        while time() - start_time <= duration:
+            rospy.loginfo(time()-start_time)
             pub.publish(twist)
 
-    def move_forward(self, velocity: float, duration: float):
+    def move_forward(self, velocity, duration):
         self.drive(velocity, 0, duration)
 
-    def move_backward(self, velocity: float, duration: float):
+    def move_backward(self, velocity, duration):
         self.drive(-velocity, 0, duration)
 
-    def turn_left(self, angle: float, duration: float):
+    def turn_left(self, angle, duration):
         self.drive(0, angle, duration)
 
-    def turn_right(self, angle: float, duration: float):
+    def turn_right(self, angle, duration):
         self.drive(0, -angle, duration)

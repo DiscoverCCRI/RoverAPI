@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 """ Examples
 
@@ -18,8 +18,8 @@ def main():
     leo.turn_right(41, 4)
     leo.move_forward(.3048, 2)
     leo.move_backward(.3048, 2)
-    leo.drive(-.3048, -7, 5)
     leo.drive(.3048, 7, 5)
+    leo.drive(-.3048, 7, 5)
 
 
 if __name__ == "__main__":
