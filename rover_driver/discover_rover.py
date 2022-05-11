@@ -43,7 +43,7 @@ class Rover:
         self.name = name
 
     def drive(self, linear_vel: float, angular_vel: float, duration: float):
-        rospy.init_node(name + "_rover")
+        rospy.init_node(self.name + "_rover")
         twist = Twist()
         pub = rospy.Publisher("/cmd_vel", Twist, queue_size=20)
         angular_in_rad = radians(angular_vel)
