@@ -53,7 +53,7 @@ class Camera:
 
     def __get_data_str(self) -> str:
         data = check_output("""rostopic echo -n 1 /camera/image_raw/compressed 
-                                                  #  | grep data""", shell=True)
+                                                    | grep data""", shell=True)
         data = data.decode("utf-8")
         data = data.lstrip("data: [")
         data = data.rstrip()
