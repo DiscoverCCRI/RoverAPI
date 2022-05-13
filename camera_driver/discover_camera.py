@@ -3,6 +3,9 @@
 from subprocess import check_output
 from re import findall
 import rospy
+import PIL.Image as Image
+from io import BytesIO
+from datetime import datetime 
 
 class Camera:
     """
@@ -19,7 +22,7 @@ class Camera:
     take_photo():
         Creates the ros node to capture the image, captures the int[] from the 
         compressed imaged posted to the compressed image topic, and converts it 
-        to a .jpeg image for the user
+        to a .jpg image for the user
     __get_data_str() -> str:
         Gets the output from the rostopic /camera/image_raw/compressed for a
         single frame, and strips the output down to just the actual image data,
@@ -39,13 +42,19 @@ class Camera:
     def take_photo(self):
         rospy.init_node("raspicam_still_photo")
 
-        data_str = __get_data_str()
-        int_list = __str_to_int_list(data_str)
-        img = list_to_img(int_list: [])        
+        data_str = self.__get_data_str()
+        int_list = self.__str_to_int_list(data_str)
+        img = self.__list_to_img(int_list)
+        
+        time = datetime.now()
+        time_str = "leo_cam_" + time.strftime("%d-%m-%Y_%H:%M:%S") + ".jpg"
+        
+        img.save(time_str)
 
     def __get_data_str(self) -> str:
         data = check_output("""rostopic echo -n 1 /camera/image_raw/compressed 
-                                                    | grep data""", shell=True)
+                                                  #  | grep data""", shell=True)
+        data = data.decode("utf-8")
         data = data.lstrip("data: [")
         data = data.rstrip()
         data = data.rstrip("]")
@@ -67,5 +76,12 @@ class Camera:
         
         return int_list
 
-    def __list_to_img(img_list: []) -> img:
-        return None
+    def __list_to_img(self, img_list: []) -> Image:
+        bytestring = bytearray()
+        
+        for item in img_list:
+            bytestring.append(item)
+        
+        img = Image.open(BytesIO(bytestring))
+        
+        return img
