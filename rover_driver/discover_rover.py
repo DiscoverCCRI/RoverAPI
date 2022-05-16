@@ -1,17 +1,18 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import rospy
-from time import time 
+from time import time
 from geometry_msgs.msg import Twist
 from math import radians
 
+
 class Rover:
-    
+
     """
     A class used to instantiate and drive LeoRovers
-    
+
     ...
-    
+
     Attributes:
     -----------
     name: str
@@ -20,19 +21,19 @@ class Rover:
     Methods:
     --------
     drive(linear_vel: float, angular_vel: float, duration: float)
-        Drives the rover with both the linear (m/s) and angular (deg/s) 
-        velocities for a given number of seconds. The angular velocity is 
-        converted from deg/s to rad/s. The max linear velocity is ~0.5 m/s and 
+        Drives the rover with both the linear (m/s) and angular (deg/s)
+        velocities for a given number of seconds. The angular velocity is
+        converted from deg/s to rad/s. The max linear velocity is ~0.5 m/s and
         the max angular velocity is ~45 deg/s.
     move_forward(velocity: float, duration: float)
         Drives the rover forward with a given velocity (m/s) for a given number
         of seconds. The max velocity is ~0.5 m/s.
     move_backward(velocity: float, duration: float)
-        Drives the rover backward with a given velocity (m/s) for a given 
+        Drives the rover backward with a given velocity (m/s) for a given
         number of seconds. The max velocity is ~0.5 m/s.
     turn_left(angle: float, duration: float)
         Turns the rover to the left (counterclockwise) with a given angular
-        velocity (deg/s) for a given number of seconds. The max velocity is 
+        velocity (deg/s) for a given number of seconds. The max velocity is
         ~45 deg/s.
     turn_right(angle: float, duration: float)
         Turns the rover to the left (clockwise) with a given angular velocity
@@ -41,10 +42,6 @@ class Rover:
 
     def __init__(self, name):
         self.name = name
-
-
-    def drive(self, linear_vel, angular_vel, duration):
-        rospy.init_node(self.name + "_rover_driver")
 
     def drive(self, linear_vel: float, angular_vel: float, duration: float):
         rospy.init_node(self.name + "_rover")
@@ -56,12 +53,11 @@ class Rover:
         # stores values in the twist object
         twist.linear.x = linear_vel
         twist.angular.z = angular_in_rad
-        
+
         start_time = time()
-        
+
         # runs until duration has been reached
         while time() - start_time <= duration:
-            rospy.loginfo(time()-start_time)
             pub.publish(twist)
 
     def move_forward(self, velocity, duration):
