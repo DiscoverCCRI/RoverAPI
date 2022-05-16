@@ -40,8 +40,8 @@ class Camera:
 
     def __init__(self):
         rospy.init_node("camera")
-        self.__subscribe_to_image_topic()
         self.img_buffer = []
+        self.__subscribe_to_image_topic()
 
     def __subscribe_to_image_topic(self):
         subscriber = rospy.Subscriber("/camera/image_raw/compressed",
@@ -52,9 +52,7 @@ class Camera:
         self.img_buffer.append(message.data)
 
     def take_photo(self):
-        buffer_len = len(self.img_buffer)
-        latest_photo = self.img_buffer[buffer_len-1]
-        img = self.__list_to_img(latest_photo)
+        img = self.__list_to_img(self.img_buffer[-1])
 
         time = datetime.now()
         time_str = "leo_cam_" + time.strftime("%d-%m-%Y_%H:%M:%S") + ".jpg"
