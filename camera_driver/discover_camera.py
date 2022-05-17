@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 
 import rospy
-import PIL.Image as Image
-from io import BytesIO
+import PIL.Image as Img
 from datetime import datetime
-from sensor_msgs.msg import CompressedImage
+from sensor_msgs.msg import Image
 
 
 class Camera:
@@ -45,10 +44,10 @@ class Camera:
 
     def __subscribe_to_image_topic(self):
         subscriber = rospy.Subscriber("/camera/image_raw/compressed",
-                     CompressedImage, self.__callback_get_image)
+                     Image, self.__callback_get_image)
         rospy.spin()
 
-    def __callback_get_image(self, message: CompressedImage):
+    def __callback_get_image(self, message: Image):
         self.img_buffer.append(message.data)
 
     def take_photo(self):
@@ -65,6 +64,7 @@ class Camera:
         for item in img_list:
             bytestring.append(item)
 
-        img = Image.open(BytesIO(bytestring))
+        bytesObj = bytes(bytestring)
+        img = Img.frombytes("RGB", (640, 480), bytesObj)
 
         return img
