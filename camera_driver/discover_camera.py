@@ -40,7 +40,6 @@ class Camera:
     """
 
     def __init__(self):
-        rospy.init_node("camera")
         self._img_buffer = []
         self.__subscribe_to_image_topic()
 
