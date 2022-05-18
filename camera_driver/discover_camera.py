@@ -39,11 +39,14 @@ class Camera:
     """
 
     def __init__(self):
-        self._img_buffer = []
-        self.__subscribe_to_image_topic()
+        try:
+            rospy.init_node("discover_rover")
+        finally:
+            self._img_buffer = []
+            self.__subscribe_to_image_topic()
 
-        # allows the buffer to store an entire image before init is over
-        sleep(0.25)
+            # allows the buffer to store an entire image before init is over
+            sleep(0.25)
 
     def __subscribe_to_image_topic(self):
         subscriber = rospy.Subscriber("/camera/image_raw",

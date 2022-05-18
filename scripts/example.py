@@ -5,7 +5,7 @@ from rover_api.discover_camera import Camera
 
 
 def main():
-    rover = Rover("leo")
+    rover = Rover()
     cam = Camera()
 
     cam.take_photo()
