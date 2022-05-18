@@ -39,7 +39,7 @@ class Rover:
         (deg/s) for a given number of seconds. The max velocity is ~45 deg/s.
     """
 
-    def __init__(self, name):
+    def __init__(self):
         try:
             rospy.init_node("discover_rover")
         except:
