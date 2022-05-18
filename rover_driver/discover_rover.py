@@ -60,14 +60,14 @@ class Rover:
         while perf_counter() - start_time <= duration:
             pub.publish(twist)
 
-    def move_forward(self, velocity, duration):
+    def move_forward(self, velocity: float, duration: float):
         self.drive(velocity, 0, duration)
 
-    def move_backward(self, velocity, duration):
+    def move_backward(self, velocity: float, duration: float):
         self.drive(-velocity, 0, duration)
 
-    def turn_left(self, angle, duration):
+    def turn_left(self, angle: float, duration: float):
         self.drive(0, angle, duration)
 
-    def turn_right(self, angle, duration):
+    def turn_right(self, angle: float, duration: float):
         self.drive(0, -angle, duration)
