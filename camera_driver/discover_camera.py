@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
 
 import rospy
-import PIL.Image as Image
+import PIL.Image as Img
 from io import BytesIO
 from datetime import datetime
 from sensor_msgs.msg import CompressedImage
+from time import sleep
 
 
 class Camera:
@@ -33,38 +34,40 @@ class Camera:
     __callback_get_image(message: CompressedImage):
         Gets the message from the /camera/image_raw/compressed topic and stores
         the image data to the image buffer
-    __list_to_img(int_list: []) -> img:
+    __list_to_img(int_list: []) -> Img:
         Takes the list of unsigned 8-bit integers and converts it into an image
         object, then returns that image
     """
 
     def __init__(self):
         rospy.init_node("camera")
-        self.img_buffer = []
+        self._img_buffer = []
         self.__subscribe_to_image_topic()
+
+        # sleeps to allow the buffer to process an entire image upon init
+        sleep(0.25)
 
     def __subscribe_to_image_topic(self):
         subscriber = rospy.Subscriber("/camera/image_raw/compressed",
                      CompressedImage, self.__callback_get_image)
-        rospy.spin()
 
     def __callback_get_image(self, message: CompressedImage):
-        self.img_buffer.append(message.data)
+        self._img_buffer.append(message.data)
 
     def take_photo(self):
-        img = self.__list_to_img(self.img_buffer[-1])
+        img = self.__list_to_img(self._img_buffer[-1])
 
         time = datetime.now()
         time_str = "leo_cam_" + time.strftime("%d-%m-%Y_%H:%M:%S") + ".jpg"
 
         img.save(time_str)
 
-    def __list_to_img(self, img_list: []) -> Image:
+    def __list_to_img(self, img_list: []) -> Img:
         bytestring = bytearray()
 
         for item in img_list:
             bytestring.append(item)
 
-        img = Image.open(BytesIO(bytestring))
+        img = Img.open(BytesIO(bytestring))
 
         return img
