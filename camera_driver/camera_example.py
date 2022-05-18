@@ -15,8 +15,6 @@ from discover_camera import Camera
 def main():
     cam = Camera()
     cam.take_photo()
-    cam.take_photo()
-    cam.take_photo()
 
 
 if __name__ == "__main__":
