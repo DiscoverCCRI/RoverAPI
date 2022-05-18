@@ -47,7 +47,7 @@ class Camera:
             self.__subscribe_to_image_topic()
 
             # sleeps to allow the buffer to process an entire image upon init
-            sleep(0.25)
+            sleep(1)
 
     def __subscribe_to_image_topic(self):
         subscriber = rospy.Subscriber("/camera/image_raw/compressed",
