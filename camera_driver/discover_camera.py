@@ -5,7 +5,7 @@ import PIL.Image as Img
 from datetime import datetime
 from sensor_msgs.msg import Image
 from time import sleep
-import subproccess as sp
+import subprocess as sp
 
 
 class Camera:
