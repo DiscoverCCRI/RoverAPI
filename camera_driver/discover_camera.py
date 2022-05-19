@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import rospy
+from io import BytesIO
 import PIL.Image as Img
 from datetime import datetime
 from sensor_msgs.msg import Image
@@ -66,7 +67,7 @@ class Camera:
         img_str = "photos/leo_" + time_str + ".jpg"
 
         img.save(img_str)
-        
+
     def __list_to_img(self, img_list: []) -> Img:
         bytestring = bytearray()
 
