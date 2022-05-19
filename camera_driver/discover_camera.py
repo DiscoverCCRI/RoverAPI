@@ -62,7 +62,7 @@ class Camera:
         self._img_buffer.append((message.data, time))
 
     def take_photo(self):
-        img_tuple = self.img_buffer[-1]
+        img_tuple = self._img_buffer[-1]
         img = self.__list_to_img(img_tuple[0])
 
         time_str = img_tuple[1].strftime("%d-%m-%Y_%H:%M:%S")
