@@ -62,9 +62,10 @@ class Camera:
         self._img_buffer.append((message.data, time))
 
     def take_photo(self):
-        img = self.__list_to_img(self._img_buffer[-1][0])
+        img_tuple = self.img_buffer[-1]
+        img = self.__list_to_img(img_tuple[0])
 
-        time_str = self._img_buffer[1].strftime("%d-%m-%Y_%H:%M:%S")
+        time_str = img_tuple[1].strftime("%d-%m-%Y_%H:%M:%S")
         img_str = "photos/leo_" + time_str + ".jpg"
 
         img.save(img_str)
