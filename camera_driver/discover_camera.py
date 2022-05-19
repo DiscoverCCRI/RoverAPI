@@ -5,6 +5,7 @@ import PIL.Image as Img
 from datetime import datetime
 from sensor_msgs.msg import Image
 from time import sleep
+import subproccess as sp
 
 
 class Camera:
@@ -42,7 +43,9 @@ class Camera:
         try:
             rospy.init_node("discover_rover")
         finally:
+            self._video_on = False
             self._img_buffer = []
+            self._video_stream = []
             self.__subscribe_to_image_topic()
 
             # allows the buffer to store an entire image before init is over
@@ -55,11 +58,14 @@ class Camera:
     def __callback_get_image(self, message: Image):
         self._img_buffer.append(message.data)
 
+        if self._video_on:
+            self._video_stream.append(message.data)
+
     def take_photo(self):
         img = self.__list_to_img(self._img_buffer[-1])
 
         time = datetime.now()
-        time_str = "leo_cam_" + time.strftime("%d-%m-%Y_%H:%M:%S") + ".jpg"
+        time_str = "leo_cam_" + time.strftime("%d-%m-%Y_%H:%M:%S") + ".png"
 
         img.save(time_str)
 
@@ -73,3 +79,27 @@ class Camera:
         img = Img.frombytes("RGB", (640, 480), bytesObj)
 
         return img
+
+    def start_video(self):
+        self._video_on = True
+
+    def stop_video(self):
+        self._video_off = False
+
+        for item in self._video_stream:
+            item = self.__list_to_img(item)
+
+        self.__save_video(self._video_stream)
+
+    def __save_video(self, video_stream: []):
+        cmd_out = ['ffmpeg', '-f', 'image2pipe', '-vcodec', 'png', '-r', '30',
+                   '-i', '-', '-vcodec', 'png', '-qscale', '0',
+                   '/root/scripts/vid.mp4']
+
+        pipe = sp.Popen(cmd_out, stdin=sp.PIPE)
+
+        for item in video_stream:
+            item.save(pipe.stdin, 'PNG')
+
+        pipe.stdin.close()
+        pipe.wait()
