@@ -18,7 +18,7 @@ class Camera:
     -----------
     img_buffer:
         A list that contains the data of each image sent over the
-        /camera/image_raw topic. Each image is stored in an array of
+        /camera/image_raw/compressed topic. Each image is stored in an array of
         unsigned 8-bit integers
     Methods:
     --------
