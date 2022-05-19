@@ -5,6 +5,8 @@ import PIL.Image as Img
 from datetime import datetime
 from sensor_msgs.msg import Image
 from time import sleep
+from os.path import exists
+from os import mkdir
 
 
 class Camera:
@@ -45,6 +47,9 @@ class Camera:
             self._img_buffer = []
             self.__subscribe_to_image_topic()
 
+            if not exists("photos/"):
+                mkdir("photos/")
+
             # allows the buffer to store an entire image before init is over
             sleep(1)
 
@@ -53,15 +58,16 @@ class Camera:
                      Image, self.__callback_get_image)
 
     def __callback_get_image(self, message: Image):
-        self._img_buffer.append(message.data)
+        time = datetime.now()
+        self._img_buffer.append((message.data, time))
 
     def take_photo(self):
-        img = self.__list_to_img(self._img_buffer[-1])
+        img = self.__list_to_img(self._img_buffer[-1][0])
 
-        time = datetime.now()
-        time_str = "leo_cam_" + time.strftime("%d-%m-%Y_%H:%M:%S") + ".jpg"
+        time_str = self._img_buffer[1].strftime("%d-%m-%Y_%H:%M:%S")
+        img_str = "photos/leo_" + time_str + ".jpg"
 
-        img.save(time_str)
+        img.save(img_str)
 
     def __list_to_img(self, img_list: []) -> Img:
         bytestring = bytearray()
