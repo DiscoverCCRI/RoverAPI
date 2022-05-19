@@ -4,7 +4,7 @@ import rospy
 from io import BytesIO
 import PIL.Image as Img
 from datetime import datetime
-from sensor_msgs.msg import Image
+from sensor_msgs.msg import CompressedImage
 from time import sleep
 from os.path import exists
 from os import mkdir
