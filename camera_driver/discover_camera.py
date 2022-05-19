@@ -2,25 +2,23 @@
 
 import rospy
 import PIL.Image as Img
-from io import BytesIO
 from datetime import datetime
-from sensor_msgs.msg import CompressedImage
+from sensor_msgs.msg import Image
 from time import sleep
+from os.path import exists
+from os import mkdir
 
 
 class Camera:
     """
     A class used to instantiate and use the raspicam on the LeoRover
-
     ...
-
     Attributes:
     -----------
     img_buffer:
         A list that contains the data of each image sent over the
-        /camera/image_raw/compressed topic. Each image is stored in an array of
+        /camera/image_raw topic. Each image is stored in an array of
         unsigned 8-bit integers
-
     Methods:
     --------
     take_photo():
@@ -46,24 +44,29 @@ class Camera:
             self._img_buffer = []
             self.__subscribe_to_image_topic()
 
-            # sleeps to allow the buffer to process an entire image upon init
+            if not exists("photos/"):
+                mkdir("photos/")
+
+            # allows the buffer to store an entire image before init is over
             sleep(1)
 
     def __subscribe_to_image_topic(self):
-        subscriber = rospy.Subscriber("/camera/image_raw/compressed",
-                     CompressedImage, self.__callback_get_image)
+        subscriber = rospy.Subscriber("/camera/image_raw",
+                     Image, self.__callback_get_image)
 
-    def __callback_get_image(self, message: CompressedImage):
-        self._img_buffer.append(message.data)
+    def __callback_get_image(self, message: Image):
+        time = datetime.now()
+        self._img_buffer.append((message.data, time))
 
     def take_photo(self):
-        img = self.__list_to_img(self._img_buffer[-1])
+        img_tuple = self._img_buffer[-1]
+        img = self.__list_to_img(img_tuple[0])
 
-        time = datetime.now()
-        time_str = "leo_cam_" + time.strftime("%d-%m-%Y_%H:%M:%S") + ".jpg"
+        time_str = img_tuple[1].strftime("%d-%m-%Y_%H:%M:%S")
+        img_str = "photos/leo_" + time_str + ".jpg"
 
-        img.save(time_str)
-
+        img.save(img_str)
+        
     def __list_to_img(self, img_list: []) -> Img:
         bytestring = bytearray()
 
