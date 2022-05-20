@@ -59,7 +59,12 @@ class Camera:
 
     def __callback_get_image(self, message: Image):
         time = datetime.now()
+
+        if self._img_buffer.count() >= 30:
+            self._img_buffer.pop(0)
+
         self._img_buffer.append((message.data, time))
+
 
     def take_photo(self):
         img_tuple = self._img_buffer[-1]
