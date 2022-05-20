@@ -4,7 +4,7 @@ import rospy
 from io import BytesIO
 import PIL.Image as Img
 from datetime import datetime
-from sensor_msgs.msg import Image
+from sensor_msgs.msg import CompressedImage
 from time import sleep
 from os.path import exists
 from os import mkdir
@@ -52,8 +52,8 @@ class Camera:
             sleep(1)
 
     def __subscribe_to_image_topic(self):
-        subscriber = rospy.Subscriber("/camera/image_raw",
-                     Image, self.__callback_get_image)
+        subscriber = rospy.Subscriber("/camera/image_raw/compressed",
+                     CompressedImage, self.__callback_get_image)
 
     def __callback_get_image(self, message: Image):
         time = datetime.now()
