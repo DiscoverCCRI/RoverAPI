@@ -55,7 +55,7 @@ class Camera:
         subscriber = rospy.Subscriber("/camera/image_raw/compressed",
                      CompressedImage, self.__callback_get_image)
 
-    def __callback_get_image(self, message: Image):
+    def __callback_get_image(self, message: CompressedImage):
         time = datetime.now()
 
         if self._img_buffer.count() >= 30:
