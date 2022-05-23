@@ -30,7 +30,7 @@ class Camera:
         to a .jpg image for the user
     __subscribe_to_image_topic():
         Creates a subscribe to subscribe to the /camera/image_raw/compressed
-        topic created by the raspicam node. Then "spins" or continues to run
+        topic created by the raspicam node. Then continues to run
         the function until the script is stopped
     __callback_get_image(message: CompressedImage):
         Gets the message from the /camera/image_raw/compressed topic and stores
@@ -54,7 +54,7 @@ class Camera:
             sleep(1)
 
     def __subscribe_to_image_topic(self):
-        subscriber = rospy.Subscriber("/camera/image_raw",
+        rospy.Subscriber("/camera/image_raw",
                      Image, self.__callback_get_image)
 
     def __callback_get_image(self, message: Image):
