@@ -45,8 +45,8 @@ class Camera:
             self._img_buffer = []
             self.__subscribe_to_image_topic()
 
-            if not exists("~/photos/"):
-                mkdir("~/photos/")
+            if not exists("/root/photos/"):
+                mkdir("/root/photos/")
 
             # allows the buffer to store an entire image before init is over
             sleep(1)
@@ -68,7 +68,7 @@ class Camera:
         img = self.__list_to_img(img_tuple[0])
 
         time_str = img_tuple[1].strftime("%d-%m-%Y_%H:%M:%S")
-        img_str = "photos/leo_" + time_str + ".jpg"
+        img_str = "/root/photos/leo_" + time_str + ".jpg"
 
         img.save(img_str)
 
