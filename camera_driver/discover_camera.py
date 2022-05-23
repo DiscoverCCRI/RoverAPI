@@ -54,8 +54,7 @@ class Camera:
             sleep(1)
 
     def __subscribe_to_image_topic(self):
-        rospy.Subscriber("/camera/image_raw",
-                     Image, self.__callback_get_image)
+        rospy.Subscriber("/camera/image_raw", Image, self.__callback_get_image)
 
     def __callback_get_image(self, message: Image):
         time = datetime.now()
