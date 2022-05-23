@@ -2,7 +2,6 @@
 
 import rospy
 import PIL.Image as Img
-from datetime import datetime
 from sensor_msgs.msg import Image
 from time import sleep
 from os.path import exists
@@ -57,17 +56,17 @@ class Camera:
         rospy.Subscriber("/camera/image_raw", Image, self.__callback_get_image)
 
     def __callback_get_image(self, message: Image):
-        time = datetime.now()
-
         if len(self._img_buffer) >= 30:
             self._img_buffer.pop(0)
 
-        self._img_buffer.append((message.data, time))
+        self._img_buffer.append((message.data, message.header.stamp))
 
     def take_photo(self):
         img_tuple = self._img_buffer[-1]
         img = self.__list_to_img(img_tuple[0])
 
+        py_time = img_tuple.to_time() 
+        print(py_time)
         time_str = img_tuple[1].strftime("%d-%m-%Y_%H:%M:%S")
         img_str = "/root/photos/leo_" + time_str + ".jpg"
 
