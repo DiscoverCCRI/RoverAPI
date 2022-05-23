@@ -58,7 +58,7 @@ class Camera:
     def __callback_get_image(self, message: CompressedImage):
         time = datetime.now()
 
-        if self._img_buffer.count() >= 30:
+        if len(self._img_buffer) >= 30:
             self._img_buffer.pop(0)
 
         self._img_buffer.append((message.data, time))
