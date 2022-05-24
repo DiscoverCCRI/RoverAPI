@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-from rospy import init_node, Publisher
-from time import perf_counter
+from rospy import init_node, Publisher, get_time
 from geometry_msgs.msg import Twist
 from math import radians
 
@@ -54,10 +53,10 @@ class Rover:
         twist.linear.x = linear_vel
         twist.angular.z = angular_in_rad
 
-        start_time = perf_counter()
+        start_time = get_time()
 
         # runs until duration has been reached
-        while perf_counter() - start_time <= duration:
+        while get_time() - start_time <= duration:
             pub.publish(twist)
 
     def move_forward(self, velocity: float, duration: float):
