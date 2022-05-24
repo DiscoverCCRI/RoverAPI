@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import rospy
+from rospy import init_node, Publisher
 from time import perf_counter
 from geometry_msgs.msg import Twist
 from math import radians
@@ -41,13 +41,13 @@ class Rover:
 
     def __init__(self):
         try:
-            rospy.init_node("discover_rover")
+            init_node("discover_rover")
         except:
             pass
 
     def drive(self, linear_vel: float, angular_vel: float, duration: float):
         twist = Twist()
-        pub = rospy.Publisher("/cmd_vel", Twist, queue_size=20)
+        pub = Publisher("/cmd_vel", Twist, queue_size=20)
         angular_in_rad = radians(angular_vel)
 
         # stores values in the twist object
