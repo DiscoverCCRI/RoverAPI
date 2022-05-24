@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 
-import rospy
+from rospy import init_node, Subscriber
 import PIL.Image as Img
 from sensor_msgs.msg import Image
+from datetime import datetime
 from time import sleep
 from os.path import exists
 from os import mkdir
@@ -41,7 +42,7 @@ class Camera:
 
     def __init__(self):
         try:
-            rospy.init_node("discover_rover")
+            init_node("discover_rover")
         finally:
             self._img_buffer = []
             self.__subscribe_to_image_topic()
@@ -53,20 +54,20 @@ class Camera:
             sleep(1)
 
     def __subscribe_to_image_topic(self):
-        rospy.Subscriber("/camera/image_raw", Image, self.__callback_get_image)
+        Subscriber("/camera/image_raw", Image, self.__callback_get_image)
 
     def __callback_get_image(self, message: Image):
+        time = datetime.now()
+
         if len(self._img_buffer) >= 30:
             self._img_buffer.pop(0)
 
-        self._img_buffer.append((message.data, message.header.stamp))
+        self._img_buffer.append((message.data, time))
 
     def take_photo(self):
         img_tuple = self._img_buffer[-1]
         img = self.__list_to_img(img_tuple[0])
 
-        py_time = img_tuple.to_time() 
-        print(py_time)
         time_str = img_tuple[1].strftime("%d-%m-%Y_%H:%M:%S")
         img_str = "/root/photos/leo_" + time_str + ".jpg"
 
