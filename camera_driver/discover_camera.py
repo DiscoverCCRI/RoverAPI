@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 
-import rospy
 from io import BytesIO
+from rospy import init_node, Subscriber, sleep
 import PIL.Image as Img
 from datetime import datetime
 from sensor_msgs.msg import CompressedImage
-from time import sleep
 from os.path import exists
 from os import mkdir
 
@@ -40,7 +39,7 @@ class Camera:
 
     def __init__(self):
         try:
-            rospy.init_node("discover_rover")
+            init_node("discover_rover")
         finally:
             self._img_buffer = []
             self.__subscribe_to_image_topic()
@@ -52,8 +51,13 @@ class Camera:
             sleep(1)
 
     def __subscribe_to_image_topic(self):
+<<<<<<< HEAD
         rospy.Subscriber("/camera/image_raw/compressed",
                          CompressedImage, self.__callback_get_image)
+=======
+        Subscriber("/camera/image_raw/compressed",
+                   CompressedImage, self.__callback_get_image)
+>>>>>>> 645ca770d6809863ecf4f9a9a6e0d234759c50c2
 
     def __callback_get_image(self, message: CompressedImage):
         time = datetime.now()
