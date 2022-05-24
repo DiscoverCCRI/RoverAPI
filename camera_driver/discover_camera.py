@@ -1,10 +1,9 @@
 #!/usr/bin/env python3
 
-from rospy import init_node, Subscriber
+from rospy import init_node, Subscriber, sleep
 import PIL.Image as Img
 from sensor_msgs.msg import Image
 from datetime import datetime
-from time import sleep
 from os.path import exists
 from os import mkdir
 
