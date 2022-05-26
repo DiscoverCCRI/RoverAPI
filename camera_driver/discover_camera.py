@@ -51,13 +51,8 @@ class Camera:
             sleep(1)
 
     def __subscribe_to_image_topic(self):
-<<<<<<< HEAD
-        rospy.Subscriber("/camera/image_raw/compressed",
-                         CompressedImage, self.__callback_get_image)
-=======
         Subscriber("/camera/image_raw/compressed",
                    CompressedImage, self.__callback_get_image)
->>>>>>> 645ca770d6809863ecf4f9a9a6e0d234759c50c2
 
     def __callback_get_image(self, message: CompressedImage):
         time = datetime.now()
