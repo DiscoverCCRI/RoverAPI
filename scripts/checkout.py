@@ -3,6 +3,9 @@
 from importlib.util import find_spec
 from subprocess import run
 import sys
+from datetime import datetime
+from os.path import exists
+from os import remove
 
 
 def find_modules(arguments: []) -> []:
@@ -37,10 +40,16 @@ def install_modules(modules: []):
             try:
                 run('pip3 install ' + module, shell=True, check=True)
             except Exception:
-                print('Could not install ' + module + '. Try manual install.')
+                with open('pip.err', 'a') as outfile:
+                    time = datetime.now()
+                    time_str = time.strftime('%d-%m-%Y %H:%M:%S')
+                    out_str = time_str + ' Could not install ' + module + '.\n'
+                    outfile.write(out_str)
 
 
 def main():
+    if exists('pip.err'):
+        remove('pip.err')
     modules = find_modules(sys.argv[1:])
     install_modules(modules)
 
