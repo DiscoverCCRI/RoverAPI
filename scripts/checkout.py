@@ -29,6 +29,8 @@ def find_modules(arguments: []) -> []:
                         if '.' in line:
                             line = line[0:line.find('.')]
                         modules.append(line)
+                else:
+                    print("RoverAPI is already installed")
     return modules
 
 
