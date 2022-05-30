@@ -25,6 +25,7 @@ def find_modules(arguments: []) -> []:
                         modules.append(line)
                     elif 'import' in line:
                         line = line[7:]
+                        line = line[:line.find(' ')]
                         if '.' in line:
                             line = line[0:line.find('.')]
                         modules.append(line)
@@ -52,9 +53,7 @@ def main():
     if exists('pip.err'):
         remove('pip.err')
 
-
     modules = find_modules(sys.argv[1:])
-    print(modules)
     install_modules(modules)
 
 
