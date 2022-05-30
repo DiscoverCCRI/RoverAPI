@@ -15,18 +15,19 @@ def find_modules(arguments: []) -> []:
         with open(argument, 'r', encoding='utf-8') as infile:
             for line in infile:
                 line = line.strip()
-                if 'from' in line:
-                    line = line[5:]
-                    if '.' in line:
-                        line = line[0:line.find('.')]
-                    else:
-                        line = line[0:line.find(' ')]
-                    modules.append(line)
-                elif 'import' in line:
-                    line = line[7:]
-                    if '.' in line:
-                        line = line[0:line.find('.')]
-                    modules.append(line)
+                if not ('rover_api' in line):
+                    if 'from' in line:
+                        line = line[5:]
+                        if '.' in line:
+                            line = line[0:line.find('.')]
+                        else:
+                            line = line[0:line.find(' ')]
+                        modules.append(line)
+                    elif 'import' in line:
+                        line = line[7:]
+                        if '.' in line:
+                            line = line[0:line.find('.')]
+                        modules.append(line)
     return modules
 
 
@@ -50,7 +51,10 @@ def install_modules(modules: []):
 def main():
     if exists('pip.err'):
         remove('pip.err')
+
+
     modules = find_modules(sys.argv[1:])
+    print(modules)
     install_modules(modules)
 
 
