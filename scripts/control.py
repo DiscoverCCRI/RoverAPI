@@ -97,6 +97,7 @@ def get_container_ids() -> []:
 def kill_containers(ids: []):
     for container in ids:
         run("docker kill " + container, shell=True, check=True)
+        loginfo(container + " has been killed")
 
 
 def life_alert():
