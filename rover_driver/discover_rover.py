@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from rospy import init_node, Publisher, get_time
+from rospy import init_node, Publisher, get_time, loginfo
 from geometry_msgs.msg import Twist
 from math import radians
 
@@ -41,7 +41,8 @@ class Rover:
     def __init__(self):
         try:
             init_node("discover_rover")
-        except:
+            loginfo("Rover node started!")
+        except Exception:
             pass
 
     def drive(self, linear_vel: float, angular_vel: float, duration: float):

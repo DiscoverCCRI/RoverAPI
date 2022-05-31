@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from io import BytesIO
-from rospy import init_node, Subscriber, sleep
+from rospy import init_node, Subscriber, sleep, loginfo
 import PIL.Image as Img
 from datetime import datetime
 from sensor_msgs.msg import CompressedImage
@@ -40,6 +40,7 @@ class Camera:
     def __init__(self):
         try:
             init_node("discover_rover")
+            loginfo("Rover node started!")
         finally:
             self._img_buffer = []
             self.__subscribe_to_image_topic()
@@ -60,12 +61,15 @@ class Camera:
         if len(self._img_buffer) >= 30:
             self._img_buffer.pop(0)
 
+        # add a tuple containing the unsigned 8-bit integer data and time
         self._img_buffer.append((message.data, time))
 
     def take_photo(self):
+        # get the time object
         img_tuple = self._img_buffer[-1]
         img = self.__list_to_img(img_tuple[0])
 
+        # conver object to string
         time_str = img_tuple[1].strftime("%d-%m-%Y_%H:%M:%S")
         img_str = "/root/photos/leo_" + time_str + ".jpg"
 
@@ -74,6 +78,7 @@ class Camera:
     def __list_to_img(self, img_list: []) -> Img:
         bytestring = bytearray()
 
+        # get the byte form of the data
         for item in img_list:
             bytestring.append(item)
 
