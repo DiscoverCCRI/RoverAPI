@@ -18,7 +18,7 @@ import rospy
 from std_msgs.msg import Float32
 from sensor_msgs.msg import CompressedImage
 from os.path import exists
-from os import mkdir, remove, rmdir
+from os import mkdir, remove
 from importlib import import_module
 from sys import argv
 from subprocess import run
@@ -121,10 +121,6 @@ def main():
     if not ("-nl" in arguments) and not ("--no-life-alert" in arguments):
         check_position()
     check_power()
-
-    # cleanup
-    if exists("photos"):
-        rmdir("photos")
 
 
 if __name__ == "__main__":
