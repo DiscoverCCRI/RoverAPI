@@ -22,8 +22,11 @@ from os import remove
 def find_modules(arguments: []) -> []:
     import_modules = []
 
+    # open each .py that is passed as a command line argument
     for argument in arguments:
         with open(argument, 'r', encoding='utf-8') as infile:
+            # check each line for relevant import statements
+            # if there is one, strip it down to the name for pip
             for line in infile:
                 line = line.strip()
                 if not ('rover_api' in line):
@@ -47,14 +50,18 @@ def find_modules(arguments: []) -> []:
 
 def install_modules(import_modules: []):
     for module in import_modules:
+        # check if the module is in the python path
         if module in modules:
             print(module + ' is in sys.modules')
+        # otherwise, check if the module has already been installed
         elif find_spec(module) is not None:
             print(module + ' is already installed')
+        # otherwise, try to install the module with pip
         else:
             try:
                 run('pip3 install ' + module, shell=True, check=True)
             except Exception:
+                # write the name and the time of the module to pip.err
                 with open('pip.err', 'a') as outfile:
                     time = datetime.now()
                     time_str = time.strftime('%d-%m-%Y %H:%M:%S')
