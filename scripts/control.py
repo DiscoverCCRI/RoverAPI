@@ -7,6 +7,7 @@ from os.path import exists
 from os import mkdir, remove
 from importlib import import_module
 from sys import argv
+from subprocess import run
 
 
 def callback_check_position(message: CompressedImage):
@@ -52,6 +53,32 @@ def go_home():
     pass
 
 
+def get_container_ids() -> []:
+    ids = []
+    container_id = ""
+
+    run("docker ps >> names.txt", shell=True, check=True)
+    with open("names.txt", "r") as infile:
+        for line in infile:
+            if not("NAME" in line):
+                for char in line:
+                    if char == " ":
+                        break
+                    else:
+                        container_id += char
+
+            ids.append(container_id)
+            container_id = ""
+
+    remove("names.txt")
+    return(ids[1:])
+
+
+def kill_containers(ids: []):
+    for container in ids:
+        run("docker kill " + container, shell=True, check=True)
+
+
 def life_alert():
     pass
 
@@ -67,9 +94,11 @@ def main():
         for line in infile:
             arguments.append(line.strip())
 
+    kill_containers(get_container_ids())
+
     if not ("-nl" in arguments) and not ("--no-life-alert" in arguments):
         check_position()
-    check_power()
+    # check_power()
 
 
 if __name__ == "__main__":
