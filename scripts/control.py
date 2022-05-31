@@ -38,7 +38,7 @@ def callback_check_position(message: CompressedImage):
     data_module = import_module("photos.data")
     prev_data = data_module.data
 
-    # check two parallel lists to see how much data they have in common
+    # check two images to see how many pixels they have in common
     for index in range(len(prev_data)):
         if prev_data[index] == message.data[index]:
             num_same_pixels += 1
