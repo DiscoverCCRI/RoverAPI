@@ -69,7 +69,7 @@ class Camera:
         img_tuple = self._img_buffer[-1]
         img = self.__list_to_img(img_tuple[0])
 
-        # conver object to string
+        # convert object to string
         time_str = img_tuple[1].strftime("%d-%m-%Y_%H:%M:%S")
         img_str = "/root/photos/leo_" + time_str + ".jpg"
 
