@@ -1,5 +1,19 @@
 #!/usr/bin/env python3
 
+"""
+Discover Rover Control
+
+This script exercises control over the LeoRover for DiscoverCCRI.
+It monitors all appropriate ros nodes and topics and can make the rover kill
+all user code running in docker containers, call for help, and go home.
+
+This script accepts a list of arguments that can change which parts of the
+rover it script monitors.
+
+This script should be combined with some sort of task-scheduler such as cron to
+monitor on a schedule.
+"""
+
 import rospy
 from std_msgs.msg import Float32
 from sensor_msgs.msg import CompressedImage
@@ -14,6 +28,8 @@ def callback_check_position(message: CompressedImage):
     num_same_pixels = 0
     pixel_total = len(message.data)
 
+    # check if there a directory for storing data from the camera
+    # if not make it and an init file
     if not exists("photos"):
         mkdir("photos")
         with open("__init__.py", "w") as outfile:
@@ -22,6 +38,7 @@ def callback_check_position(message: CompressedImage):
     data_module = import_module("photos.data")
     prev_data = data_module.data
 
+    # check two parallel lists to see how much data they have in common
     for index in range(len(prev_data)):
         if prev_data[index] == message.data[index]:
             num_same_pixels += 1
@@ -29,6 +46,7 @@ def callback_check_position(message: CompressedImage):
     if num_same_pixels / pixel_total >= 0.97:
         life_alert()
 
+    # cleanup
     remove("photos/data.py")
     with open("photos/data.py", "w") as outfile:
         outfile.write("data: ")
@@ -57,6 +75,7 @@ def get_container_ids() -> []:
     ids = []
     container_id = ""
 
+    # get the container id's of all running docker containers
     run("docker ps >> names.txt", shell=True, check=True)
     with open("names.txt", "r") as infile:
         for line in infile:
@@ -70,6 +89,7 @@ def get_container_ids() -> []:
             ids.append(container_id)
             container_id = ""
 
+    # cleanup and returrn
     remove("names.txt")
     return(ids[1:])
 
@@ -84,11 +104,13 @@ def life_alert():
 
 
 def main():
+    # start rosnode
     try:
         rospy.init_node("discover_control")
     finally:
         rospy.loginfo("Control node started")
 
+    # get arguments
     arguments = []
     with open(argv[1], "r") as infile:
         for line in infile:
@@ -98,7 +120,7 @@ def main():
 
     if not ("-nl" in arguments) and not ("--no-life-alert" in arguments):
         check_position()
-    # check_power()
+    check_power()
 
 
 if __name__ == "__main__":

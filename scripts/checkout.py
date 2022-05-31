@@ -1,5 +1,16 @@
 #!/usr/bin/env python3
 
+"""
+Checkout
+
+This script uses the importlib module to install any necessary python libraries
+on a docker container for the user. Any relevant .py files should be passed as
+command line arguments for the script to check for import statements. If the
+script cannot be found by pip, the name of the script is added to the pip.err
+file
+"""
+
+
 from importlib.util import find_spec
 from subprocess import run
 from sys import argv, modules
