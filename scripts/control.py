@@ -14,7 +14,7 @@ This script should be combined with some sort of task-scheduler such as cron to
 monitor on a schedule.
 """
 
-import rospy
+from rospy import Subscriber, loginfo, init_node
 from std_msgs.msg import Float32
 from sensor_msgs.msg import CompressedImage
 from os.path import exists
@@ -59,12 +59,12 @@ def callback_check_power(message: Float32):
 
 
 def check_power():
-    rospy.Subscriber("/battery", Float32, callback_check_power)
+    Subscriber("/battery", Float32, callback_check_power)
 
 
 def check_position():
-    rospy.Subscriber("/camera/image_raw/compressed", CompressedImage,
-                     callback_check_position)
+    Subscriber("/camera/image_raw/compressed", CompressedImage,
+               callback_check_position)
 
 
 def go_home():
@@ -106,9 +106,10 @@ def life_alert():
 def main():
     # start rosnode
     try:
-        rospy.init_node("discover_control")
-    finally:
-        rospy.loginfo("Control node started")
+        init_node("discover_control")
+        loginfo("Control node started")
+    except Exception:
+        return
 
     # get arguments
     arguments = []
