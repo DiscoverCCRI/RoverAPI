@@ -120,7 +120,8 @@ def main():
 
     if not ("-nl" in arguments) and not ("--no-life-alert" in arguments):
         check_position()
-    check_power()
+    if not ("-np" in arguments) and not ("--no-power" in arguments):
+        check_power()
 
 
 if __name__ == "__main__":
