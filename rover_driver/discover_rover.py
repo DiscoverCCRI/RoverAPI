@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
+from math import radians
 from rospy import init_node, Publisher, get_time, loginfo
 from geometry_msgs.msg import Twist
-from math import radians
 
 
 class Rover:
