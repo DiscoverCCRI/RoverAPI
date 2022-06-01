@@ -18,7 +18,7 @@
         <arg name="verbose" value="$(arg verbose)"/>
     </include>
 
-    <include file="$(find leo_gazebo)/launch/spawn_robot.launch"
+    <include file="/root/catkin_ws/src/rover_api/launch/volcano_robot.launch"
              pass_all_args="true"/>
 
 </launch>
