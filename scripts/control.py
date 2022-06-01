@@ -14,14 +14,14 @@ This script should be combined with some sort of task-scheduler such as cron to
 monitor on a schedule.
 """
 
-from rospy import Subscriber, loginfo, init_node
-from std_msgs.msg import Float32
-from sensor_msgs.msg import CompressedImage
 from os.path import exists
 from os import mkdir, remove
 from importlib import import_module
 from sys import argv
 from subprocess import run
+from rospy import Subscriber, loginfo, init_node
+from std_msgs.msg import Float32
+from sensor_msgs.msg import CompressedImage
 
 
 def callback_check_position(message: CompressedImage):

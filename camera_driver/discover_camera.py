@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 
 from io import BytesIO
-from rospy import init_node, Subscriber, sleep, loginfo
-import PIL.Image as Img
 from datetime import datetime
-from sensor_msgs.msg import CompressedImage
 from os.path import exists
 from os import mkdir
+import PIL.Image as Img
+from sensor_msgs.msg import CompressedImage
+from rospy import init_node, Subscriber, sleep, loginfo
 
 
 class Camera:
