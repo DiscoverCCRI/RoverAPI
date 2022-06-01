@@ -25,8 +25,8 @@ from subprocess import run
 
 
 def callback_check_position(message: CompressedImage):
-    num_same_pixels = 0
-    pixel_total = len(message.data)
+    num_same_pixels = 0.0
+    pixel_total = float(len(message.data))
 
     # check if there a directory for storing data from the camera
     # if not make it and an init file
@@ -41,7 +41,7 @@ def callback_check_position(message: CompressedImage):
     # check two images to see how many pixels they have in common
     for index in range(len(prev_data)):
         if prev_data[index] == message.data[index]:
-            num_same_pixels += 1
+            num_same_pixels += 1.0
 
     if num_same_pixels / pixel_total >= 0.97:
         life_alert()
