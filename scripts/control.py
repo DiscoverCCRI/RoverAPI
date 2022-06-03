@@ -21,7 +21,7 @@ from sys import argv
 from subprocess import run
 from rospy import Subscriber, loginfo, init_node
 from std_msgs.msg import Float32
-from sensor_msgs.msg import CompressedImage
+ from sensor_msgs.msg import CompressedImage
 
 
 def callback_check_position(message: CompressedImage):
