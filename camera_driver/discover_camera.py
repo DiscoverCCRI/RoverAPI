@@ -56,7 +56,7 @@ class Camera:
                    CompressedImage, self.__callback_get_image)
 
     def __callback_get_image(self, message: CompressedImage):
-        time = datetime.now()
+        time = message.header.stamp
 
         if len(self._img_buffer) >= 30:
             self._img_buffer.pop(0)
@@ -69,8 +69,11 @@ class Camera:
         img_tuple = self._img_buffer[-1]
         img = self.__list_to_img(img_tuple[0])
 
+        # convert to a python datetime object
+        py_time = datetime.fromtimestamp(img_tuple[1].to_time())
+
         # convert object to string
-        time_str = img_tuple[1].strftime("%d-%m-%Y_%H:%M:%S")
+        time_str = py_time.strftime("%d-%m-%Y_%H:%M:%S")
         img_str = "/root/photos/leo_" + time_str + ".jpg"
 
         img.save(img_str)
