@@ -40,7 +40,7 @@ class Camera:
     def __init__(self):
         try:
             init_node("discover_rover")
-            loginfo("Rover node started!")
+            loginfo("Camera initialized!")
         finally:
             self._img_buffer = []
             self.__subscribe_to_image_topic()
