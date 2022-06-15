@@ -1,4 +1,4 @@
-#!usr/bin/env python3
+#!/usr/bin/env python3
 
 from rover_api.discover_rover import Rover
 from rover_api.discover_camera import Camera
