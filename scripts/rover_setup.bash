@@ -21,4 +21,4 @@ echo "source /opt/ros/noetic/setup.bash" >> /home/pi/.bashrc \
 sudo apt-get install cron
 # Finally run the following command: crontab -e
 # Copy the following text into the crontab:
-# @reboot sleep 20; sudo date -s "$(wget -qSO- --max-redirect=0 google.com 2>&1 | grep Date: | cut -d' ' -f5-8)Z"
+# @reboot sleep 60 && sudo date -s "$(wget -qSO- --max-redirect=0 google.com 2>&1 | grep Date: | cut -d' ' -f5-8)Z"
