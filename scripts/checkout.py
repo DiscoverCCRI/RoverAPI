@@ -10,8 +10,7 @@ all given files and the manifest into a zipped directory.
 
 
 from sys import argv
-from os.path import exists
-from os import remove, mkdir
+from os import mkdir
 from subprocess import run
 
 
@@ -52,7 +51,7 @@ def compress(arguments: []):
     # create the directory, move all files, and compress
     mkdir('rover_experiment')
     for argument in arguments:
-        run('mv ' + argument + ' rover_experiment', shell=True)
+        run('cp ' + argument + ' rover_experiment', shell=True)
     run('mv manifest rover_experiment', shell=True)
     run('zip -rm rover_experiment.zip rover_experiment', shell=True)
 
