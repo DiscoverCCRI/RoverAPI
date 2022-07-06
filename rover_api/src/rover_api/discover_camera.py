@@ -27,8 +27,8 @@ class Camera:
         Creates a subscriber to subscribe to the /camera/image_raw
         topic created by the raspicam node. Then continues to run
         the function until the script is stopped
-    __callback_get_image(message: CompressedImage):
-        Gets the message from the /camera/image_raw/compressed topic and stores
+    __callback_get_image(message: Image):
+        Gets the message from the /camera/image_raw topic and stores
         the image data to the image buffer
     """
 
