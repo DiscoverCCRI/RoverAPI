@@ -4,7 +4,8 @@
 Checkout
 
 This script uses argv to scan any given files for imports and creates a list of
-modules that need to be installed using pip called a manifest
+modules that need to be installed using pip called a manifest. Then combines
+all given files and the manifest into a zipped directory.
 """
 
 
@@ -48,6 +49,7 @@ def write_manifest(import_modules: []):
 
 def compress(arguments: []):
 
+    # create the directory, move all files, and compress
     mkdir('rover_experiment')
     for argument in arguments:
         run('mv ' + argument + ' rover_experiment', shell=True)
@@ -57,12 +59,10 @@ def compress(arguments: []):
 
 def main():
 
-    if exists('manifest'):
-        remove('manifest')
-
-    import_modules = find_modules(argv[1:])
+    file_arguments = argv[1:]
+    import_modules = find_modules(file_arguments)
     write_manifest(import_modules)
-    compress(argv[1:])
+    compress(file_arguments)
 
 
 if __name__ == '__main__':
