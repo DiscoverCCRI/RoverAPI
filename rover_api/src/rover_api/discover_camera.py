@@ -56,7 +56,7 @@ class Camera:
         if len(self._img_buffer) >= 30:
             self._img_buffer.pop(0)
 
-        # add a tuple containing the unsigned 8-bit integer data and time
+        # add a tuple containing the message and time
         self._img_buffer.append((message, time))
 
     def take_photo(self):
