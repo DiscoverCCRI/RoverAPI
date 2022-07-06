@@ -10,7 +10,8 @@ modules that need to be installed using pip called a manifest
 
 from sys import argv
 from os.path import exists
-from os import remove
+from os import remove, mkdir
+from subprocess import run
 
 
 def find_modules(arguments: []) -> []:
@@ -45,6 +46,15 @@ def write_manifest(import_modules: []):
             outfile.write(module + "\n")
 
 
+def compress(arguments: []):
+
+    mkdir('rover_experiment')
+    for argument in arguments:
+        run('mv ' + argument + ' rover_experiment', shell=True)
+    run('mv manifest rover_experiment', shell=True)
+    run('zip -rm rover_experiment.zip rover_experiment', shell=True)
+
+
 def main():
 
     if exists('manifest'):
@@ -52,6 +62,7 @@ def main():
 
     import_modules = find_modules(argv[1:])
     write_manifest(import_modules)
+    compress(argv[1:])
 
 
 if __name__ == '__main__':
