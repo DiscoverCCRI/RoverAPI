@@ -50,7 +50,7 @@ class Camera:
         Subscriber("/camera/image_raw", Image, self.__callback_get_image)
 
     def __callback_get_image(self, message: Image):
-
+        # check if the buffer is full
         if len(self._img_buffer) >= 30:
             self._img_buffer.pop(0)
 
@@ -58,19 +58,21 @@ class Camera:
         self._img_buffer.append(message)
 
     def take_photo(self):
+       # create the bridge to translate image types
         bridge = CvBridge()
 
-        # get the time object
+        # get the image message
         img_msg = self._img_buffer[-1]
 
-        # convert to an OpenCV image
+        # convert to an OpenCV image object
         img = bridge.imgmsg_to_cv2(img_msg, desired_encoding='passthrough')
 
-        # convert to a python datetime object
+        # convert time to a python datetime object
         py_time = datetime.fromtimestamp(img_msg.header.stamp.to_time())
 
-        # convert object to string
+        # convert time object to string
         time_str = py_time.strftime("%d-%m-%Y_%H:%M:%S")
         img_str = "photos/leo_" + time_str + ".jpg"
 
+        # save image
         cv2.imwrite(img_str, img)
