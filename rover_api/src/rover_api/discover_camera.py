@@ -50,26 +50,24 @@ class Camera:
         Subscriber("/camera/image_raw", Image, self.__callback_get_image)
 
     def __callback_get_image(self, message: Image):
-        time = message.header.stamp
 
         if len(self._img_buffer) >= 30:
             self._img_buffer.pop(0)
 
-        # add a tuple containing the unsigned 8-bit integer data and time
-        self._img_buffer.append((message, time))
+        # add the image message to the buffer
+        self._img_buffer.append(message)
 
     def take_photo(self):
         bridge = CvBridge()
 
         # get the time object
-        img_tuple = self._img_buffer[-1]
+        img_msg = self._img_buffer[-1]
 
         # convert to an OpenCV image
-        img = bridge.imgmsg_to_cv2(img_tuple[0], 
-                                   desired_encoding='passthrough')
+        img = bridge.imgmsg_to_cv2(img_msg, desired_encoding='passthrough')
 
         # convert to a python datetime object
-        py_time = datetime.fromtimestamp(img_tuple[1].to_time())
+        py_time = datetime.fromtimestamp(img_msg.header.stamp.to_time())
 
         # convert object to string
         time_str = py_time.strftime("%d-%m-%Y_%H:%M:%S")
