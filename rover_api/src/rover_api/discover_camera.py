@@ -40,8 +40,8 @@ class Camera:
             self._img_buffer = []
             self.__subscribe_to_image_topic()
 
-            if not exists("/root/photos/"):
-                mkdir("/root/photos/")
+            if not exists("photos/"):
+                mkdir("photos/")
 
             # allows the buffer to store an entire image before init is over
             sleep(1)
@@ -73,6 +73,6 @@ class Camera:
 
         # convert object to string
         time_str = py_time.strftime("%d-%m-%Y_%H:%M:%S")
-        img_str = "/root/photos/leo_" + time_str + ".jpg"
+        img_str = "photos/leo_" + time_str + ".jpg"
 
         cv2.imwrite(img_str, img)
