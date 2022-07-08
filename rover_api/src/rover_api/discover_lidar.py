@@ -1,9 +1,8 @@
-#!/usr/bin/env python3
-
 from sensor_msgs.msg import LaserScan, PointCloud2
-from rospy import loginfo, sleep, Subscriber, init_node
+from rospy import loginfo, sleep, Subscriber, init_node, Time
 import laser_geometry.laser_geometry as lg
-from datetime import datetime
+from rosbag import Bag
+from discover_utils import get_time_str
 # import discover_depth_camera.DepthCamera as DepthCamera
 
 
@@ -14,6 +13,8 @@ class Lidar:
             loginfo("Lidar initialized!")
         finally:
             self._scan_buffer = []
+            self._bag_open = False
+            self._rosbag = None
             self.__subscribe_to_scan()
 
             # give scan a chance to start publishing
@@ -28,6 +29,9 @@ class Lidar:
         Subscriber("/scan", LaserScan, self.__callback_get_scan)
 
     def __callback_get_scan(self, message: LaserScan):
+        if(self._bag_open):
+            self._rosbag.write("/scan", message)
+
         if len(self._scan_buffer) >= 30:
             self._scan_buffer.pop(0)
 
@@ -37,23 +41,27 @@ class Lidar:
 
         laser_msg = self._scan_buffer[-1]
 
-        # convert time to a python datetime object
-        py_time = datetime.fromtimestamp(laser_msg.header.stamp.to_time())
-
-        # convert time object to string
-        time_str = py_time.strftime("%d-%m-%Y_%H:%M:%S")
-        file_name = "scan_" + time_str + ".scan"
+        file_name = get_time_str(laser_msg.header.stamp, ".scan")
 
         with open(file_name, 'w', encoding='utf-8') as outfile:
-            outfile.write("Sequence: " + laser_msg.header.seq)
-            outfile.write("\nStamp: " + laser_msg.header.stamp)
-            outfile.write("\nFrame ID: " + laser_msg.header.frame_id)
-            outfile.write("\nAngle Min: " + laser_msg.angle_min)
-            outfile.write("\nAngle Max: " + laser_msg.angle_max)
-            outfile.write("\nAngle Increment: " + laser_msg.angle_increment)
-            outfile.write("\nTime Increment: " + laser_msg.time_increment)
-            outfile.write("\nScan Time: " + laser_msg.scan_time)
-            outfile.write("\nRange Min: " + laser_msg.range_min)
-            outfile.write("\nRange Max: " + laser_msg.range_max)
-            outfile.write("\nRanges: " + laser_msg.ranges)
-            outfile.write("\nIntensities: " + laser_msg.intensities)
+            outfile.write("Sequence: " + str(laser_msg.header.seq))
+            outfile.write("\nStamp: " + str(laser_msg.header.stamp))
+            outfile.write("\nFrame ID: " + str(laser_msg.header.frame_id))
+            outfile.write("\nAngle Min: " + str(laser_msg.angle_min))
+            outfile.write("\nAngle Max: " + str(laser_msg.angle_max))
+            outfile.write("\nAngle Increment: "
+                          + str(laser_msg.angle_increment))
+            outfile.write("\nTime Increment: " + str(laser_msg.time_increment))
+            outfile.write("\nScan Time: " + str(laser_msg.scan_time))
+            outfile.write("\nRange Min: " + str(laser_msg.range_min))
+            outfile.write("\nRange Max: " + str(laser_msg.range_max))
+            outfile.write("\nRanges: " + str(laser_msg.ranges))
+            outfile.write("\nIntensities: " + str(laser_msg.intensities))
+
+    def start_recording(self):
+        self._bag_open = True
+        self._rosbag = Bag(get_time_str(Time.now(), ".bag"), 'w')
+
+    def stop_recording(self):
+        self._bag_open = False
+        self._rosbag.close()
