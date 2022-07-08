@@ -207,4 +207,4 @@ include_directories(
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
 catkin_python_setup()
-catkin_install_python(PROGRAMS src/rover_api/discover_rover.py src/rover_api/discover_camera.py DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
+catkin_install_python(PROGRAMS src/rover_api/discover_rover.py src/rover_api/discover_camera.py src/rover_api/discover_depth_camera.py src/rover_api/discover_utils.py src/rover_api/discover_lidar.py DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION})
