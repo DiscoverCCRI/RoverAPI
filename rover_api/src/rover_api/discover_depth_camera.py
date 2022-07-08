@@ -1,12 +1,10 @@
-#!/usr/bin/env python3
-
-from datetime import datetime
 from os.path import exists
 from os import mkdir
 from sensor_msgs.msg import Image, PointCloud2
 from rospy import sleep, Subscriber, init_node, loginfo
 import cv2
 from cv_bridge import CvBridge
+from discover_utils import get_time_str
 
 
 class DepthCamera:
@@ -55,14 +53,9 @@ class DepthCamera:
         # convert to an OpenCV image
         img = bridge.imgmsg_to_cv2(depth_img, desired_encoding="16UC1")
 
-        # convert to a python datetime object
-        py_time = datetime.fromtimestamp(depth_img.header.stamp.to_time())
+        img_str = get_time_str(depth_img.header.stamp, ".jpg")
 
-        # convert object to string
-        time_str = py_time.strftime("%d-%m-%Y_%H:%M:%S")
-        img_str = "photos/leo_depth_" + time_str + ".jpg"
-
-        cv2.imwrite(img_str, img)
+        cv2.imwrite("photos/" + img_str, img)
 
     def get_point_cloud(self) -> PointCloud2:
         return self._pc_buffer[-1]
