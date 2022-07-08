@@ -4,7 +4,7 @@ from sensor_msgs.msg import Image, PointCloud2
 from rospy import sleep, Subscriber, init_node, loginfo
 import cv2
 from cv_bridge import CvBridge
-from discover_utils import get_time_str
+from rover_api.discover_utils import get_time_str
 
 
 class DepthCamera:

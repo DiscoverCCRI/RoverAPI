@@ -4,7 +4,7 @@ from sensor_msgs.msg import Image
 from rospy import init_node, Subscriber, sleep, loginfo
 import cv2
 from cv_bridge import CvBridge
-from discover_utils import get_time_str
+from rover_api.discover_utils import get_time_str
 
 
 class Camera:
