@@ -24,8 +24,8 @@ class Lidar:
     start_recording(): opens the rosbag object, and then sets the recording
     flag to true.
     stop_recording(): closes the rosbag object, and sets the flag to false.
-    convert_to_pointcloud(message: LaserScan): takes in a LaserScan message
-    and returns it as a PointCloud2 message.
+    convert_to_pointcloud(message: LaserScan) -> PointCloud2: takes in a
+    LaserScan message and returns it as a PointCloud2 message.
     __subscribe_to_scan(): creates a subscriber to capture the LaserScan
     messages being broadcast by the lidar on the /scan topic.
     __callback_get_scan(message: LaserScan): saves the messages from the /scan
