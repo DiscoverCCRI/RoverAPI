@@ -1,12 +1,10 @@
-#!/usr/bin/env python3
-
-from datetime import datetime
 from os.path import exists
 from os import mkdir
 from sensor_msgs.msg import Image
 from rospy import init_node, Subscriber, sleep, loginfo
 import cv2
 from cv_bridge import CvBridge
+from rover_api.discover_utils import get_time_str
 
 
 class Camera:
@@ -68,11 +66,7 @@ class Camera:
         img = bridge.imgmsg_to_cv2(img_msg, desired_encoding='passthrough')
 
         # convert time to a python datetime object
-        py_time = datetime.fromtimestamp(img_msg.header.stamp.to_time())
-
-        # convert time object to string
-        time_str = py_time.strftime("%d-%m-%Y_%H:%M:%S")
-        img_str = "photos/leo_" + time_str + ".jpg"
+        img_str = get_time_str(img_msg.header.stamp, ".jpg")
 
         # save image
-        cv2.imwrite(img_str, img)
+        cv2.imwrite("photos/" + img_str, img)
