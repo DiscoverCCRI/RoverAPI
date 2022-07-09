@@ -58,7 +58,7 @@ class Camera:
         self._img_buffer.append(message)
 
     def take_photo(self):
-       # create the bridge to translate image types
+        # create the bridge to translate image types
         bridge = CvBridge()
 
         # get the image message
