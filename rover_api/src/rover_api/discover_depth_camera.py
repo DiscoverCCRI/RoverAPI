@@ -8,6 +8,30 @@ from rover_api.discover_utils import get_time_str
 
 
 class DepthCamera:
+    """
+    A class for instantiating and using the Intel RealSense depth camera.
+    ...
+    Attributes:
+    -----------
+    depth_buffer: a buffer of the 15 newest images published from the depth
+    camera.
+    pc_buffer: a buffer of the 15 newest point clouds published from the depth
+    camera.
+    Methods:
+    --------
+    take_depth_photo(): gets the newest image from the depth buffer and then
+    saves it as .jpg file.
+    get_point_cloud(): returns the newest point cloud from the buffer.
+    __callback_get_depth(message: Image): saves the images published on the
+    /camera/depth/image_rect_raw topic and saves them to the buffer.
+    __callback_get_point_cloud(message: PointCloud2) : saves the point clouds
+    published on the /camera/depth/color/points and saves them to the buffer.
+    __subscibe_to_depth_image(): creates a subscriber and subscribes to the
+    /camera/depth/image_rect_raw topic.
+    __subscribe_to_point_cloud(): creates a subscriber and subscribes to the
+    /camera/depth/color/points topic.
+    """
+
     def __init__(self):
         try:
             init_node("discover_rover")
