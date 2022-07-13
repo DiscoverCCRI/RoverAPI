@@ -18,7 +18,7 @@ echo "source /opt/ros/noetic/setup.bash" >> /home/pi/.bashrc \
     && mv /home/pi/RoverAPI/scripts/example.py /home/pi \
     && chmod u+x /home/pi/example.py \
     && sudo rm -r /home/pi/RoverAPI
-sudo apt-get install cron
+sudo apt-get -y install cron ros-noetic-rplidar*
 # Finally run the following command: crontab -e
 # Copy the following text into the crontab:
 # @reboot sleep 60 && sudo date -s "$(wget -qSO- --max-redirect=0 google.com 2>&1 | grep Date: | cut -d' ' -f5-8)Z"
