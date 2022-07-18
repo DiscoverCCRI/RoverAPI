@@ -5,6 +5,8 @@ from rosbag import Bag
 import roslaunch
 from subprocess import run
 from rover_api.discover_utils import get_time_str
+from os import mkdir
+from os.path import exists
 # import discover_depth_camera.DepthCamera as DepthCamera
 
 
@@ -45,6 +47,10 @@ class Lidar:
             self._rosbag = None
             self.__subscribe_to_scan()
             self._map_launch = self.__init_launch()
+            
+            if not exists("maps/"):
+                mkdir("maps")
+                
             # give scan a chance to start publishing
             sleep(0.25)
 
@@ -98,7 +104,7 @@ class Lidar:
         self._map_launch.start()
 
     def stop_mapping(self):
-        run("rosrun map_server map_saver -f " + get_time_str(Time.now(), ""),
+        run("rosrun map_server map_saver -f maps/" + get_time_str(Time.now(), ""),
             shell=True)
         self._map_launch.shutdown()
 
