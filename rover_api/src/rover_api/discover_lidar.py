@@ -2,7 +2,6 @@ from sensor_msgs.msg import LaserScan, PointCloud2
 from rospy import loginfo, sleep, Subscriber, init_node, Time
 import laser_geometry.laser_geometry as lg
 from rosbag import Bag
-from discover_utils import get_time_str
 import roslaunch
 from subprocess import run
 from rover_api.discover_utils import get_time_str
@@ -91,15 +90,16 @@ class Lidar:
         uuid = roslaunch.rlutil.get_or_generate_uuid(None, False)
         roslaunch.configure_logging(uuid)
 
-        launch = roslaunch.parent.ROSLaunchParent(uuid, ["/root/catkin_ws/src \
-                      /hector_slam/hector_slam_launch/launch/tutorial.launch"])
+        launch = roslaunch.parent.ROSLaunchParent(uuid, ["/root/catkin_ws/src"
+                   + "/hector_slam/hector_slam_launch/launch/tutorial.launch"])
         return launch
 
     def start_mapping(self):
         self._map_launch.start()
 
     def stop_mapping(self):
-        run("rosrun map_server map_saver -f " + get_time_str(Time.now(), ""), shell=True)
+        run("rosrun map_server map_saver -f " + get_time_str(Time.now(), ""),
+            shell=True)
         self._map_launch.shutdown()
 
     def start_recording(self):
