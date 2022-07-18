@@ -99,7 +99,7 @@ class Lidar:
         self._map_launch.start()
 
     def stop_mapping(self):
-        run("rosrun map_server map_saver -f " + get_time_str(Time.now(), ""))
+        run("rosrun map_server map_saver -f " + get_time_str(Time.now(), ""), shell=True)
         self._map_launch.shutdown()
 
     def start_recording(self):
