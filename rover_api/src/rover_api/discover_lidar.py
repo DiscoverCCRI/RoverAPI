@@ -2,7 +2,13 @@ from sensor_msgs.msg import LaserScan, PointCloud2
 from rospy import loginfo, sleep, Subscriber, init_node, Time
 import laser_geometry.laser_geometry as lg
 from rosbag import Bag
+<<<<<<< HEAD
+from discover_utils import get_time_str
+import roslaunch
+from subprocess import run
+=======
 from rover_api.discover_utils import get_time_str
+>>>>>>> 5a8b34b799723473686d19aeb179fc7c310ba4bc
 # import discover_depth_camera.DepthCamera as DepthCamera
 
 
@@ -42,7 +48,7 @@ class Lidar:
             self._bag_open = False
             self._rosbag = None
             self.__subscribe_to_scan()
-
+            self._map_launch = self.__init_launch()
             # give scan a chance to start publishing
             sleep(0.25)
 
@@ -83,6 +89,21 @@ class Lidar:
             outfile.write("\nRange Max: " + str(laser_msg.range_max))
             outfile.write("\nRanges: " + str(laser_msg.ranges))
             outfile.write("\nIntensities: " + str(laser_msg.intensities))
+
+    def __init_launch(self):
+        uuid = roslaunch.rlutil.get_or_generate_uuid(None, False)
+        roslaunch.configure_logging(uuid)
+
+        launch = roslaunch.parent.ROSLaunchParent(uuid, ["/root/catkin_ws/src \
+                      /hector_slam/hector_slam_launch/launch/tutorial.launch"])
+        return launch
+
+    def start_mapping(self):
+        self._map_launch.start()
+
+    def stop_mapping(self):
+        run("rosrun map_server map_saver -f " + get_time_str(Time.now(), ""))
+        self._map_launch.shutdown()
 
     def start_recording(self):
         self._bag_open = True
