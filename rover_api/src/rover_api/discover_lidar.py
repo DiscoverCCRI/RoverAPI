@@ -2,13 +2,10 @@ from sensor_msgs.msg import LaserScan, PointCloud2
 from rospy import loginfo, sleep, Subscriber, init_node, Time
 import laser_geometry.laser_geometry as lg
 from rosbag import Bag
-<<<<<<< HEAD
 from discover_utils import get_time_str
 import roslaunch
 from subprocess import run
-=======
 from rover_api.discover_utils import get_time_str
->>>>>>> 5a8b34b799723473686d19aeb179fc7c310ba4bc
 # import discover_depth_camera.DepthCamera as DepthCamera
 
 
