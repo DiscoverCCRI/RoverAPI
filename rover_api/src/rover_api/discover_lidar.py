@@ -47,10 +47,10 @@ class Lidar:
             self._rosbag = None
             self.__subscribe_to_scan()
             self._map_launch = self.__init_launch()
-            
+
             if not exists("maps/"):
                 mkdir("maps")
-                
+
             # give scan a chance to start publishing
             sleep(0.25)
 
