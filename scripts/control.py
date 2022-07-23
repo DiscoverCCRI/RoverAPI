@@ -15,7 +15,7 @@ monitor on a schedule.
 """
 
 from os.path import exists
-from os import mkdir, remove, environ
+from os import mkdir, remove
 from importlib import import_module
 from sys import argv
 from subprocess import run
@@ -27,6 +27,7 @@ import docker
 
 
 def callback_check_position(message: CompressedImage):
+    # TODO: Change to use RTK
     num_same_pixels = 0.0
     pixel_total = float(len(message.data))
 
@@ -65,55 +66,64 @@ def check_power():
 
 
 def check_position():
+    # TODO: change to RTK
     Subscriber("/camera/image_raw/compressed", CompressedImage,
                callback_check_position)
 
 
 def go_home():
+    # TODO: define home for the rovers at each site, figure out AMCL
     pass
 
 
-def get_container_ids() -> []:
-    ids = []
-    container_id = ""
+def kill_container(container):
+    container.kill()
+    loginfo(container.name + " has been killed")
 
-    # get the container id's of all running docker containers
-    run("docker ps >> names.txt", shell=True, check=True)
-    with open("names.txt", "r") as infile:
-        for line in infile:
-            if not ("NAME" in line):
-                for char in line:
-                    if char == " ":
-                        break
-                    else:
-                        container_id += char
-
-            ids.append(container_id)
-            container_id = ""
-
-    # cleanup and return
-    remove("names.txt")
-    return(ids[1:])
-
-
-def kill_containers(ids: []):
-    for container in ids:
-        run("docker kill " + container, shell=True, check=True)
-        loginfo(container + " has been killed")
 
 def is_time_up() -> bool:
     return get_end_time() == get_time_str(Time.now(), "")
 
-def get_end_time() -> str:
-    run("")
 
-def life_alert():
+def get_end_time() -> str:
+    # TODO: ask team how we want to store start and end times (env?)
     pass
 
-def start_container(compose_file -> str):
+
+def life_alert():
+    # TODO: figure out how this is going to work
+    pass
 
 
+def save_data(container, src_dir: str, dest_file: str):
+    # make sure the users know to put experiment data in ~/experiment
+    with open(dest_file, "wb") as outfile:
+        bits, stat = container.get_archive(src_dir)
+        loginfo(stat)
 
+        for chunk in bits:
+            outfile.write(chunk)
+
+
+def start_container(compose_file: str):
+    # start with compose (API doesn't support docker compose)
+    run("docker compose -f " + compose_file + " up -d", shell=True)
+    client = docker.from_env()
+    experiment_container = None
+
+    # TODO: change to accomdate multi-container applications
+    for container in client.containers.list():
+        if container.name == "client":
+            experiment_container = container
+
+    # TODO: add case for container incorrectly starting
+    if experiment_container is not None:
+        return client, container
+
+
+def upload_data(dest_link: str):
+    # TODO: sort this thing out with team
+    pass
 
 
 def main():
@@ -121,6 +131,7 @@ def main():
     try:
         init_node("discover_control")
         loginfo("Control node started")
+        client, container = start_container("docker-compose.yaml")
     except Exception:
         return
 
@@ -130,10 +141,12 @@ def main():
         for line in infile:
             arguments.append(line.strip())
 
+    # loop through all checks while rospy is active (which is always for Leo)
     while not (is_shutdown()):
         if is_time_up():
-            save_data()
-            kill_containers(get_container_ids())
+            save_data(container, "/root/experiment", "experiment_data.tar")
+            # upload_data(dest_link)
+            kill_container(container)
             return
 
         if not ("-nl" in arguments) and not ("--no-life-alert" in arguments):
