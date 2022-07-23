@@ -15,13 +15,15 @@ monitor on a schedule.
 """
 
 from os.path import exists
-from os import mkdir, remove
+from os import mkdir, remove, environ
 from importlib import import_module
 from sys import argv
 from subprocess import run
-from rospy import Subscriber, loginfo, init_node
+from rospy import Subscriber, loginfo, init_node, Time, is_shutdown
 from std_msgs.msg import Float32
 from sensor_msgs.msg import CompressedImage
+from rover_api.discover_utils import get_time_str
+import docker
 
 
 def callback_check_position(message: CompressedImage):
@@ -79,7 +81,7 @@ def get_container_ids() -> []:
     run("docker ps >> names.txt", shell=True, check=True)
     with open("names.txt", "r") as infile:
         for line in infile:
-            if not("NAME" in line):
+            if not ("NAME" in line):
                 for char in line:
                     if char == " ":
                         break
@@ -99,9 +101,19 @@ def kill_containers(ids: []):
         run("docker kill " + container, shell=True, check=True)
         loginfo(container + " has been killed")
 
+def is_time_up() -> bool:
+    return get_end_time() == get_time_str(Time.now(), "")
+
+def get_end_time() -> str:
+    run("")
 
 def life_alert():
     pass
+
+def start_container(compose_file -> str):
+
+
+
 
 
 def main():
@@ -118,12 +130,16 @@ def main():
         for line in infile:
             arguments.append(line.strip())
 
-    kill_containers(get_container_ids())
+    while not (is_shutdown()):
+        if is_time_up():
+            save_data()
+            kill_containers(get_container_ids())
+            return
 
-    if not ("-nl" in arguments) and not ("--no-life-alert" in arguments):
-        check_position()
-    if not ("-np" in arguments) and not ("--no-power" in arguments):
-        check_power()
+        if not ("-nl" in arguments) and not ("--no-life-alert" in arguments):
+            check_position()
+        if not ("-np" in arguments) and not ("--no-power" in arguments):
+            check_power()
 
 
 if __name__ == "__main__":
