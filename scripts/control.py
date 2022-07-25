@@ -76,10 +76,10 @@ def go_home():
     pass
 
 
-def kill_container(container):
-    container.kill()
+def stop_container(container):
+    container.stop()
     container.remove()
-    loginfo(container.name + " has been killed")
+    loginfo(container.name + " has been stopped and remove.")
 
 
 def is_time_up() -> bool:
@@ -108,7 +108,7 @@ def save_data(container, src_dir: str, dest_file: str):
 
 def start_container(compose_file: str):
     # start with compose (API doesn't support docker compose)
-    run("docker compose -f " + compose_file + " up -d", shell=True)
+    run("docker-compose -f " + compose_file + " up -d", shell=True)
     client = docker.from_env()
     experiment_container = None
 
@@ -147,7 +147,7 @@ def main():
         if is_time_up():
             save_data(container, "/experiment", "experiment_data.tar")
             # upload_data(dest_link)
-            kill_container(container)
+            stop_container(container)
             return
 
         if not ("-nl" in arguments) and not ("--no-life-alert" in arguments):
