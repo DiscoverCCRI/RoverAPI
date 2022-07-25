@@ -78,6 +78,7 @@ def go_home():
 
 def kill_container(container):
     container.kill()
+    container.remove()
     loginfo(container.name + " has been killed")
 
 
@@ -144,7 +145,7 @@ def main():
     # loop through all checks while rospy is active (which is always for Leo)
     while not (is_shutdown()):
         if is_time_up():
-            save_data(container, "/root/experiment", "experiment_data.tar")
+            save_data(container, "/experiment", "experiment_data.tar")
             # upload_data(dest_link)
             kill_container(container)
             return
