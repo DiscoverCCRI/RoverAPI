@@ -20,6 +20,12 @@ echo "source /opt/ros/noetic/setup.bash" >> /home/pi/.bashrc \
     && chmod u+x /home/pi/example.py \
     && sudo rm -r /home/pi/RoverAPI
 sudo apt-get -y install cron
+sudo usermod -aG docker pi 
+sudo useradd -m experimenter
+sudo chsh -s /bin/rbash experimenter
+sudo usermod -aG docker experimenter
+sudo cp /home/pi/.bashrc /home/experimenter/.bashrc
+sudo echo "docker exec -it client /bin/bash" >> /home/experimenter/.bashrc 
 # Finally run the following command: crontab -e
 # Copy the following text into the crontab:
 # @reboot sleep 60 && sudo date -s "$(wget -qSO- --max-redirect=0 google.com 2>&1 | grep Date: | cut -d' ' -f5-8)Z" && sudo chmod 666 /dev/ttyUSB*
