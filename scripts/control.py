@@ -124,7 +124,7 @@ def start_container(compose_file: str):
 
     # TODO: add case for container incorrectly starting
     if experiment_container is not None:
-        experiment_container.run_exec("mkdir /experiment")
+        experiment_container.exec_run("mkdir /experiment")
         return client, container
 
 
