@@ -25,6 +25,11 @@ from sensor_msgs.msg import CompressedImage
 from rover_api.discover_utils import get_time_str
 import docker
 
+COMPOSE_FILE = "docker_compose.yaml"
+DATA_DIR = "/experiment"
+DATA_FILE = "experiment_data"
+
+
 
 def callback_check_position(message: CompressedImage):
     # TODO: Change to use RTK
@@ -97,7 +102,7 @@ def life_alert():
 
 
 def save_data(container, src_dir: str, dest_file: str):
-    # make sure the users know to put experiment data in ~/experiment
+    # make sure the users know to put experiment data in /experiment
     with open(dest_file, "wb") as outfile:
         bits, stat = container.get_archive(src_dir)
         loginfo(stat)
@@ -119,6 +124,7 @@ def start_container(compose_file: str):
 
     # TODO: add case for container incorrectly starting
     if experiment_container is not None:
+        experiment_container.run_exec("mkdir /experiment")
         return client, container
 
 
@@ -132,7 +138,7 @@ def main():
     try:
         init_node("discover_control")
         loginfo("Control node started")
-        client, container = start_container("docker-compose.yaml")
+        client, container = start_container(COMPOSE_FILE)
     except Exception:
         return
 
@@ -145,7 +151,7 @@ def main():
     # loop through all checks while rospy is active (which is always for Leo)
     while not (is_shutdown()):
         if is_time_up():
-            save_data(container, "/experiment", "experiment_data.tar")
+            save_data(container, DATA_DIR, DATA_FILE + ".tar")
             # upload_data(dest_link)
             stop_container(container)
             return
