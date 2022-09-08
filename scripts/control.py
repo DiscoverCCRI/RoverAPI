@@ -117,9 +117,9 @@ def main():
 
     # get arguments
     arguments = []
-    with open(argv[1], "r") as infile:
-        for line in infile:
-            arguments.append(line.strip())
+    # with open(argv[1], "r") as infile:
+        # for line in infile:
+            # arguments.append(line.strip())
 
     # loop through all checks while rospy is active (which is always for Leo)
     while not (is_shutdown()):
