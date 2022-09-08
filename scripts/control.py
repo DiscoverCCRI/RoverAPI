@@ -19,7 +19,7 @@ from os import mkdir, remove
 from importlib import import_module
 from sys import argv
 from subprocess import run
-from rospy import Subscriber, loginfo, init_node, Time, is_shutdown
+from rospy import Subscriber, loginfo, init_node, get_time, is_shutdown
 from std_msgs.msg import Float32
 from sensor_msgs.msg import CompressedImage
 from rover_api.discover_utils import get_time_str
@@ -61,7 +61,7 @@ def stop_container(container):
 
 
 def is_time_up(start_time) -> bool:
-    return (Time.now() - start_time) > 30
+    return (get_time() - start_time) > 30
 
 
 def get_end_time() -> str:
@@ -111,7 +111,7 @@ def main():
         init_node("discover_control")
         loginfo("Control node started")
         client, container = start_container(COMPOSE_FILE)
-        start_time = Time.now()
+        start_time = get_time()
     except Exception:
         return
 
