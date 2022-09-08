@@ -25,7 +25,7 @@ from sensor_msgs.msg import CompressedImage
 from rover_api.discover_utils import get_time_str
 import docker
 
-COMPOSE_FILE = "docker_compose.yaml"
+COMPOSE_FILE = "/home/pi/leorover-test-image/docker_compose.yaml"
 DATA_DIR = "/experiment"
 DATA_FILE = "experiment_data"
 
@@ -60,8 +60,8 @@ def stop_container(container):
     loginfo(container.name + " has been stopped and remove.")
 
 
-def is_time_up() -> bool:
-    return get_end_time() == get_time_str(Time.now(), "")
+def is_time_up(start_time) -> bool:
+    return (Time.now() - start_time) > 30
 
 
 def get_end_time() -> str:
@@ -97,7 +97,6 @@ def start_container(compose_file: str):
 
     # TODO: add case for container incorrectly starting
     if experiment_container is not None:
-        experiment_container.exec_run("mkdir /experiment")
         return client, container
 
 
@@ -112,6 +111,7 @@ def main():
         init_node("discover_control")
         loginfo("Control node started")
         client, container = start_container(COMPOSE_FILE)
+        start_time = Time.now()
     except Exception:
         return
 
@@ -123,7 +123,7 @@ def main():
 
     # loop through all checks while rospy is active (which is always for Leo)
     while not (is_shutdown()):
-        if is_time_up():
+        if is_time_up(start_time):
             save_data(container, DATA_DIR, DATA_FILE + ".tar")
             # upload_data(dest_link)
             stop_container(container)
