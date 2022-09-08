@@ -33,33 +33,7 @@ DATA_FILE = "experiment_data"
 
 def callback_check_position(message: CompressedImage):
     # TODO: Change to use RTK
-    num_same_pixels = 0.0
-    pixel_total = float(len(message.data))
-
-    # check if there a directory for storing data from the camera
-    # if not make it and an init file
-    if not exists("photos"):
-        mkdir("photos")
-        with open("__init__.py", "w") as outfile:
-            outfile.write("import data")
-
-    data_module = import_module("photos.data")
-    prev_data = data_module.data
-
-    # check two images to see how many pixels they have in common
-    for index in range(len(prev_data)):
-        if prev_data[index] == message.data[index]:
-            num_same_pixels += 1.0
-
-    if num_same_pixels / pixel_total >= 0.97:
-        life_alert()
-
-    # cleanup
-    remove("photos/data.py")
-    with open("photos/data.py", "w") as outfile:
-        outfile.write("data: ")
-        outfile.write(str(message.data))
-
+    pass
 
 def callback_check_power(message: Float32):
     if message.data < 10.0:
@@ -72,8 +46,7 @@ def check_power():
 
 def check_position():
     # TODO: change to RTK
-    Subscriber("/camera/image_raw/compressed", CompressedImage,
-               callback_check_position)
+    pass
 
 
 def go_home():
