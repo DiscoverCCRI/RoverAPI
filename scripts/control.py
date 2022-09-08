@@ -25,7 +25,7 @@ from sensor_msgs.msg import CompressedImage
 from rover_api.discover_utils import get_time_str
 import docker
 
-COMPOSE_FILE = "/home/pi/leorover-test-image/docker_compose.yaml"
+COMPOSE_FILE = "/home/pi/leorover-test-image/docker-compose.yaml"
 DATA_DIR = "/experiment"
 DATA_FILE = "experiment_data"
 
