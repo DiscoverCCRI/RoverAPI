@@ -5,7 +5,7 @@ from rospy import init_node, Subscriber, sleep, loginfo
 import cv2
 from cv_bridge import CvBridge
 from rover_api.discover_utils import get_time_str
-
+from rosbag import Bag
 
 class Camera:
     """
@@ -37,6 +37,8 @@ class Camera:
         finally:
             self._img_buffer = []
             self.__subscribe_to_image_topic()
+            self._bag = None
+            self._bag_open = False;
 
             if not exists("photos/"):
                 mkdir("photos/")
@@ -48,6 +50,9 @@ class Camera:
         Subscriber("/camera/image_raw", Image, self.__callback_get_image)
 
     def __callback_get_image(self, message: Image):
+        if(self._bag_open):
+            self._bag.write("/camera/image_raw", message)
+
         # check if the buffer is full
         if len(self._img_buffer) >= 30:
             self._img_buffer.pop(0)
@@ -70,3 +75,11 @@ class Camera:
 
         # save image
         cv2.imwrite("photos/" + img_str, img)
+
+ def start_recording(self):
+        self._bag_open = True
+        self._bag = Bag(get_time_str(Time.now(), ".bag"), 'w')
+
+    def stop_recording(self):
+        self._bag_open = False
+        self._rosbag.close()
