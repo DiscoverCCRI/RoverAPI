@@ -58,7 +58,7 @@ def go_home():
 def stop_container(container):
     container.stop()
     container.remove()
-    loginfo(container.name + " has been stopped and remove.")
+    loginfo(container.name + " has been stopped and removed.")
 
 
 def is_time_up(start_time) -> bool:
