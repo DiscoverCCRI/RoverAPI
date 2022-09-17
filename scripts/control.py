@@ -14,30 +14,31 @@ This script should be combined with some sort of task-scheduler such as cron to
 monitor on a schedule.
 """
 
-from os.path import exists
-from os import mkdir, remove
-from importlib import import_module
-from sys import argv
 from subprocess import run
 from rospy import Subscriber, loginfo, init_node, get_time, is_shutdown
-from std_msgs.msg import Float32
+from std_msgs.msg import Float32, Bool
 from sensor_msgs.msg import CompressedImage
-from rover_api.discover_utils import get_time_str
 import docker
 
 COMPOSE_FILE = "/home/pi/leorover-test-image/docker-compose.yaml"
 DATA_DIR = "/experiment"
 DATA_FILE = "experiment_data"
-
+FINISHED = False
 
 
 def callback_check_position(message: CompressedImage):
     # TODO: Change to use RTK
     pass
 
+
 def callback_check_power(message: Float32):
     if message.data < 10.0:
         go_home()
+
+
+def callback_get_finished(message: Bool):
+    global FINISHED
+    FINISHED = message.data
 
 
 def check_power():
@@ -111,28 +112,29 @@ def main():
         init_node("discover_control")
         loginfo("Control node started")
         client, container = start_container(COMPOSE_FILE)
-        start_time = get_time()
+        Subscriber("/finished", Bool, callback_get_finished)
     except Exception:
         return
 
     # get arguments
-    arguments = []
+    argument = []
     # with open(argv[1], "r") as infile:
-        # for line in infile:
-            # arguments.append(line.strip())
+    # for line in infile:
+    # argument.append(line.strip())
 
     # loop through all checks while rospy is active (which is always for Leo)
     while not (is_shutdown()):
-        if is_time_up(start_time):
+        if FINISHED:
             save_data(container, DATA_DIR, DATA_FILE + ".tar.gz")
             # upload_data(dest_link)
             stop_container(container)
             return
 
-        if not ("-nl" in arguments) and not ("--no-life-alert" in arguments):
-            check_position()
-        if not ("-np" in arguments) and not ("--no-power" in arguments):
-            check_power()
+        else:
+            if not ("-nl" in argument) and not ("--no-life-alert" in argument):
+                check_position()
+            if not ("-np" in argument) and not ("--no-power" in argument):
+                check_power()
 
 
 if __name__ == "__main__":
