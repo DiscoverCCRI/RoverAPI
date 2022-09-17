@@ -20,7 +20,7 @@ from std_msgs.msg import Float32, Bool
 from sensor_msgs.msg import CompressedImage
 import docker
 
-COMPOSE_FILE = "/home/pi/leorover-test-image/docker-compose.yaml"
+COMPOSE_FILE = "/home/pi/leorover-base-image/docker-compose.yaml"
 DATA_DIR = "/experiment"
 DATA_FILE = "experiment_data"
 FINISHED = False
@@ -125,7 +125,7 @@ def main():
     # loop through all checks while rospy is active (which is always for Leo)
     while not (is_shutdown()):
         if FINISHED:
-            save_data(container, DATA_DIR, DATA_FILE + ".tar.gz")
+            save_data(container, DATA_DIR, DATA_FILE + ".tar")
             # upload_data(dest_link)
             stop_container(container)
             return
