@@ -87,7 +87,7 @@ def save_data(container, src_dir: str, dest_file: str):
 
 def start_container(compose_file: str):
     # start with compose (API doesn't support docker compose)
-    run("docker-compose -f " + compose_file + " up -d", shell=True)
+    run("docker compose -f " + compose_file + " up -d", shell=True)
     client = docker.from_env()
     experiment_container = None
 
