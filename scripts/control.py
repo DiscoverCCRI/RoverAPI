@@ -20,7 +20,7 @@ from std_msgs.msg import Float32, Bool
 from sensor_msgs.msg import CompressedImage
 import docker
 
-COMPOSE_FILE = "/home/pi/leorover-base-image/docker-compose.yaml"
+COMPOSE_FILE = "/home/pi/RoverDemo/docker-compose.yaml"
 DATA_DIR = "/experiment"
 DATA_FILE = "experiment_data"
 FINISHED = False
