@@ -14,13 +14,13 @@ This script should be combined with some sort of task-scheduler such as cron to
 monitor on a schedule.
 """
 
+from sys import argv
 from subprocess import run
 from rospy import Subscriber, loginfo, init_node, get_time, is_shutdown
 from std_msgs.msg import Float32, Bool
 from sensor_msgs.msg import CompressedImage
 import docker
 
-COMPOSE_FILE = "/home/pi/leorover-test-image/docker-compose.yaml"
 DATA_DIR = "/experiment"
 DATA_FILE = "experiment_data"
 FINISHED = False
@@ -107,17 +107,24 @@ def upload_data(dest_link: str):
 
 
 def main():
-    # start rosnode
+
+    compose_file = "/home/pi/leorover-base-image/docker-compose.yaml"
+    for argument in argv:
+        if "-c" in argument:
+            compose_file = argument[3:]
+        elif "--compose-file" in argument:
+            compose_file = argument[15:]
+
+    # start rosnode and container
     try:
         init_node("discover_control")
         loginfo("Control node started")
-        client, container = start_container(COMPOSE_FILE)
+        client, container = start_container(compose_file)
         Subscriber("/finished", Bool, callback_get_finished)
     except Exception:
         return
 
     # get arguments
-    argument = []
     # with open(argv[1], "r") as infile:
     # for line in infile:
     # argument.append(line.strip())
@@ -131,9 +138,9 @@ def main():
             return
 
         else:
-            if not ("-nl" in argument) and not ("--no-life-alert" in argument):
+            if not ("-l" in argv) and not ("--no-life-alert" in argv):
                 check_position()
-            if not ("-np" in argument) and not ("--no-power" in argument):
+            if not ("-p" in argv) and not ("--no-power" in argv):
                 check_power()
 
 
