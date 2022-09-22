@@ -1,11 +1,12 @@
 from os.path import exists
 from os import mkdir
 from sensor_msgs.msg import Image
-from rospy import init_node, Subscriber, sleep, loginfo
+from rospy import init_node, Time, Subscriber, sleep, loginfo
 import cv2
 from cv_bridge import CvBridge
 from rover_api.discover_utils import get_time_str
 from rosbag import Bag
+
 
 class Camera:
     """
@@ -38,7 +39,7 @@ class Camera:
             self._img_buffer = []
             self.__subscribe_to_image_topic()
             self._bag = None
-            self._bag_open = False;
+            self._bag_open = False
 
             if not exists("photos/"):
                 mkdir("photos/")
