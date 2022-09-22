@@ -83,4 +83,4 @@ class Camera:
 
     def stop_recording(self):
         self._bag_open = False
-        self._rosbag.close()
+        self._bag.close()
