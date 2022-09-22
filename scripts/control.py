@@ -76,7 +76,7 @@ def life_alert():
 def save_data(container, src_dir: str, dest_file: str):
     # make sure the users know to put experiment data in /experiment
     with open(dest_file, "wb") as outfile:
-        bits, stat = container.get_archive(src_dir)
+        bits, stat = container.get_archive(src_dir, encode_stream=True)
         loginfo(stat)
 
         for chunk in bits:
