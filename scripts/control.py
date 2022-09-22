@@ -129,7 +129,7 @@ def main():
     # loop through all checks while rospy is active (which is always for Leo)
     while not (is_shutdown()):
         if FINISHED:
-            save_data(container, DATA_DIR, DATA_FILE + ".tar")
+            save_data(container, DATA_DIR, DATA_FILE + ".tar.gz")
             # upload_data(dest_link)
             stop_container(container)
             return
