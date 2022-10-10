@@ -1,7 +1,7 @@
 from math import radians
 from rospy import init_node, Publisher, get_time, loginfo
 from geometry_msgs.msg import Twist
-
+from rosbag import Bag
 
 class Rover:
 
@@ -40,9 +40,19 @@ class Rover:
         try:
             init_node("discover_rover")
             loginfo("Rover node started!")
+            self._bag_open = False
+            self._rosbag = None
+            self.__subscribe_to_vel()
         except Exception:
             pass
 
+    def __subscribe_to_vel(self):
+        Subscriber("/cmd_vel", Twist, self.__callback_get_vel)
+        
+    def __callback_get_scan(self, msg: Twist):
+        if self._bag_open:
+            self._rosbag.write("/cmd_vel", msg)
+       
     def drive(self, linear_vel: float, angular_vel: float, duration: float):
         twist = Twist()
         pub = Publisher("/cmd_vel", Twist, queue_size=20)
@@ -69,3 +79,11 @@ class Rover:
 
     def turn_right(self, angle: float, duration: float):
         self.drive(0, -angle, duration)
+        
+      def start_recording(self):
+        self._bag_open = True
+        self._rosbag = Bag(get_time_str(Time.now() + "_vel", ".bag"), 'w')
+
+    def stop_recording(self):
+        self._bag_open = False
+        self._rosbag.close()
