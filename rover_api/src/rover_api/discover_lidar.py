@@ -1,4 +1,5 @@
 from sensor_msgs.msg import LaserScan, PointCloud2
+from geometry_msgs.msg import Twist
 from rospy import loginfo, sleep, Subscriber, init_node, Time
 import laser_geometry.laser_geometry as lg
 from rosbag import Bag
@@ -46,6 +47,7 @@ class Lidar:
             self._bag_open = False
             self._rosbag = None
             self.__subscribe_to_scan()
+            self.__subscribe_to_vel()
             self._map_launch = self.__init_launch()
 
             if not exists("/experiment/maps/"):
@@ -59,9 +61,16 @@ class Lidar:
 
         return lp.projectLaser(message)
 
+    def __subscribe_to_vel(self):
+        Subscriber("/cmd_vel", Twist, self.__callback_get_vel)
+    
     def __subscribe_to_scan(self):
         Subscriber("/scan", LaserScan, self.__callback_get_scan)
 
+    def __callback_get_vel(self, message: Twist):
+        if(self._bag_open):
+            self._rosbag.write("/cmd_vel", message)
+        
     def __callback_get_scan(self, message: LaserScan):
         if(self._bag_open):
             self._rosbag.write("/scan", message)
