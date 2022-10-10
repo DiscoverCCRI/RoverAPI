@@ -46,7 +46,6 @@ class Lidar:
             self._bag_open = False
             self._rosbag = None
             self.__subscribe_to_scan()
-            self.__subscribe_to_vel()
             self._map_launch = self.__init_launch()
 
             if not exists("/experiment/maps/"):
@@ -111,7 +110,7 @@ class Lidar:
 
     def start_recording(self):
         self._bag_open = True
-        self._rosbag = Bag(get_time_str(Time.now(), ".bag"), 'w')
+        self._rosbag = Bag(get_time_str(Time.now() + "_scan", ".bag"), 'w')
 
     def stop_recording(self):
         self._bag_open = False
