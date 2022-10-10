@@ -1,5 +1,5 @@
 from math import radians
-from rospy import Time, init_node, Publisher, get_time, loginfo
+from rospy import Time, init_node, Publisher, Subscriber, get_time, loginfo
 from geometry_msgs.msg import Twist
 from rosbag import Bag
 from rover_api.discover_utils import get_time_str
@@ -41,17 +41,17 @@ class Rover:
     def __init__(self):
         try:
             init_node("discover_rover")
+        finally:
             loginfo("Rover node started!")
             self._bag_open = False
             self._rosbag = None
             self.__subscribe_to_vel()
-        except Exception:
-            pass
+       
 
     def __subscribe_to_vel(self):
         Subscriber("/cmd_vel", Twist, self.__callback_get_vel)
         
-    def __callback_get_scan(self, msg: Twist):
+    def __callback_get_vel(self, msg: Twist):
         if self._bag_open:
             self._rosbag.write("/cmd_vel", msg)
        
