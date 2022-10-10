@@ -2,6 +2,7 @@ from math import radians
 from rospy import init_node, Publisher, get_time, loginfo
 from geometry_msgs.msg import Twist
 from rosbag import Bag
+from rover_api.discover_utils import get_time_str
 
 class Rover:
 
