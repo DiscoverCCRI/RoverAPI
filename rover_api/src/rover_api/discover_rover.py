@@ -80,7 +80,7 @@ class Rover:
     def turn_right(self, angle: float, duration: float):
         self.drive(0, -angle, duration)
         
-      def start_recording(self):
+    def start_recording(self):
         self._bag_open = True
         self._rosbag = Bag(get_time_str(Time.now() + "_vel", ".bag"), 'w')
 
