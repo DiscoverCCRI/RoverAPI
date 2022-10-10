@@ -84,7 +84,7 @@ class Rover:
         
     def start_recording(self):
         self._bag_open = True
-        self._rosbag = Bag(get_time_str(Time.now() + "_vel", ".bag"), 'w')
+        self._rosbag = Bag(get_time_str(Time.now(), "_vel.bag"), 'w')
 
     def stop_recording(self):
         self._bag_open = False
