@@ -4,6 +4,7 @@ from rosnode import get_node_names, rosnode_info
 DATA_DIR = "/experiment/"
 
 
+# TODO: implement functionality for depth camera
 class Config:
 
     def __init__(self):
@@ -18,6 +19,7 @@ class Config:
         
         elif type_obj == "<class 'rover_api.discover_camera.Camera'>":
             self.sensor_type = "camera"
+
 
     def isAvailable(self):
         
