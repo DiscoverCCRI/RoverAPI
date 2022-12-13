@@ -4,13 +4,13 @@ import laser_geometry.laser_geometry as lg
 from rosbag import Bag
 import roslaunch
 from subprocess import run
-from rover_api.discover_utils import get_time_str
+from rover_api.discover_utils import Config, get_time_str
 from os import mkdir
 from os.path import exists
 # import discover_depth_camera.DepthCamera as DepthCamera
 
 
-class Lidar:
+class Lidar(Config):
     """
     A class for instantiating and using the rplidar a2
     ...
@@ -46,13 +46,18 @@ class Lidar:
             self._bag_open = False
             self._rosbag = None
             self.__subscribe_to_scan()
-            self._map_launch = self.__init_launch()
+            
+            # TODO: figure out why this is in here
+            # self._map_launch = self.__init_launch()
 
-            if not exists("/experiment/maps/"):
-                mkdir("/experiment/maps")
+            # TODO: figure out why this is broken
+            # if not exists("/experiment/maps/"):
+            #     mkdir("/experiment/maps")
 
             # give scan a chance to start publishing
             sleep(0.25)
+
+            super().__init__()
 
     def convert_to_pointcloud(self, message: LaserScan) -> PointCloud2:
         lp = lg.LaserProjection()
@@ -115,3 +120,6 @@ class Lidar:
     def stop_recording(self):
         self._bag_open = False
         self._rosbag.close()
+
+    def isAvailable(self):
+        super().isAvailable()
