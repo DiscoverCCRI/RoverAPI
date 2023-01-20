@@ -7,7 +7,6 @@ from subprocess import run
 from rover_api.discover_utils import get_time_str
 from os import mkdir
 from os.path import exists
-# import discover_depth_camera.DepthCamera as DepthCamera
 
 
 class Lidar:
@@ -37,7 +36,7 @@ class Lidar:
     currently open.
     """
 
-    def __init__(self):
+    def __init__(self, subscribe=True, callback=None):
         try:
             init_node("discover_rover")
             loginfo("Lidar initialized!")
@@ -45,11 +44,15 @@ class Lidar:
             self._scan_buffer = []
             self._bag_open = False
             self._rosbag = None
-            self.__subscribe_to_scan()
-            self._map_launch = self.__init_launch()
+            if subscribe:
+                self.__subscribe_to_scan()
+            self.callback_func = callback
+            
+            
+            # self._map_launch = self.__init_launch()
 
-            if not exists("/experiment/maps/"):
-                mkdir("/experiment/maps")
+            # if not exists("/experiment/maps/"):
+            #     mkdir("/experiment/maps")
 
             # give scan a chance to start publishing
             sleep(0.25)
@@ -59,10 +62,13 @@ class Lidar:
 
         return lp.projectLaser(message)
 
-    def __subscribe_to_scan(self):
+    def subscribe_to_scan(self):
         Subscriber("/scan", LaserScan, self.__callback_get_scan)
 
     def __callback_get_scan(self, message: LaserScan):
+        if self.callback_func is not None:
+            self.callback_func()
+
         if(self._bag_open):
             self._rosbag.write("/scan", message)
 

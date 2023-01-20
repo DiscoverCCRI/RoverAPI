@@ -31,26 +31,30 @@ class Camera:
         the image data to the image buffer
     """
 
-    def __init__(self):
+    def __init__(self, subscribe=True, callback=None):
         try:
             init_node("discover_rover")
             loginfo("Camera initialized!")
         finally:
             self._img_buffer = []
-            self.__subscribe_to_image_topic()
             self._bag = None
             self._bag_open = False
-
+            self.callback_func = callback
+            if subscribe:
+                self.subscribe_to_image_topic()
             if not exists("photos/"):
                 mkdir("photos/")
 
             # allows the buffer to store an entire image before init is over
             sleep(1)
 
-    def __subscribe_to_image_topic(self):
+    def subscribe_to_image_topic(self):
         Subscriber("/camera/image_raw", Image, self.__callback_get_image)
 
     def __callback_get_image(self, message: Image):
+        if self.callback_func is not None:
+            self.callback_func()
+
         if(self._bag_open):
             self._bag.write("/camera/image_raw", message)
 
