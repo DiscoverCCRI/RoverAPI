@@ -103,3 +103,6 @@ class Lidar:
     def stop_recording(self):
         self._bag_open = False
         self._rosbag.close()
+
+    # TODO: figure out the different modes of the lidar, how to stop and start
+    # external launch files, and if it is worth it to let the user change mode
