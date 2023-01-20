@@ -56,7 +56,7 @@ def go_home():
 def stop_container(container):
     container.stop()
     container.remove()
-    loginfo(container.name + " has been stopped and removed.")
+    loginfo(f"Experiment finished. {container.name} has been stopped and removed.")
 
 
 def is_time_up(start_time) -> bool:
@@ -85,7 +85,7 @@ def save_data(container, src_dir: str, dest_file: str):
 
 def start_container(compose_file: str):
     # start with compose (API doesn't support docker compose)
-    run("docker compose -f " + compose_file + " up -d", shell=True)
+    run(f"docker compose -f {compose_file} up -d", shell=True)
     client = docker.from_env()
     experiment_container = None
 
@@ -98,7 +98,8 @@ def start_container(compose_file: str):
     if experiment_container is not None:
         return client, container
 
-
+    loginfo(f"Starting experiment with compose file {compose_file}.")
+    
 def upload_data(dest_link: str):
     # TODO: sort this thing out with team
     pass
