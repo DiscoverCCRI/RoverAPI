@@ -53,7 +53,7 @@ class Camera:
 
     def __callback_get_image(self, message: Image):
         if self.callback_func is not None:
-            self.callback_func()
+            self.callback_func(message)
 
         if(self._bag_open):
             self._bag.write("/camera/image_raw", message)
