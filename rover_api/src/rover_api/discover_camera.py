@@ -65,7 +65,10 @@ class Camera:
         # add the image message to the buffer
         self._img_buffer.append(message)
 
-    def take_photo(self):
+    def get_latest_image(self):
+        return self._img_buffer[-1]
+
+    def get_jpg(self):
         # create the bridge to translate image types
         bridge = CvBridge()
 

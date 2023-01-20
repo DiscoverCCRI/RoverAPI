@@ -78,25 +78,7 @@ class Lidar:
         self._scan_buffer.append(message)
 
     def get_latest_scan(self):
-
-        laser_msg = self._scan_buffer[-1]
-
-        file_name = get_time_str(laser_msg.header.stamp, ".scan")
-
-        with open(file_name, 'w', encoding='utf-8') as outfile:
-            outfile.write("Sequence: " + str(laser_msg.header.seq))
-            outfile.write("\nStamp: " + str(laser_msg.header.stamp))
-            outfile.write("\nFrame ID: " + str(laser_msg.header.frame_id))
-            outfile.write("\nAngle Min: " + str(laser_msg.angle_min))
-            outfile.write("\nAngle Max: " + str(laser_msg.angle_max))
-            outfile.write("\nAngle Increment: "
-                          + str(laser_msg.angle_increment))
-            outfile.write("\nTime Increment: " + str(laser_msg.time_increment))
-            outfile.write("\nScan Time: " + str(laser_msg.scan_time))
-            outfile.write("\nRange Min: " + str(laser_msg.range_min))
-            outfile.write("\nRange Max: " + str(laser_msg.range_max))
-            outfile.write("\nRanges: " + str(laser_msg.ranges))
-            outfile.write("\nIntensities: " + str(laser_msg.intensities))
+        return self._scan_buffer[-1] 
 
     def __init_launch(self):
         uuid = roslaunch.rlutil.get_or_generate_uuid(None, False)
