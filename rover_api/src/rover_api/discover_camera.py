@@ -88,4 +88,7 @@ class Camera(Config):
         self._bag.close()
 
     def isAvailable(self):
-        super().isAvailable()
+        return super().isAvailable()
+
+    def getInfo(self):
+        return super().getInfo()

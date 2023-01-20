@@ -46,7 +46,7 @@ class Rover(Config):
             self._bag_open = False
             self._rosbag = None
             self.__subscribe_to_vel()
-            super()__init__() 
+            super().__init__() 
 
     def __subscribe_to_vel(self):
         Subscriber("/cmd_vel", Twist, self.__callback_get_vel)
@@ -91,4 +91,7 @@ class Rover(Config):
         self._rosbag.close()
 
     def isAvailable(self):
-        super().isAvailable()
+        return super().isAvailable()
+
+    def getInfo(self):
+        return super().getInfo()

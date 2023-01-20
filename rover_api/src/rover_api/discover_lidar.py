@@ -7,6 +7,7 @@ from subprocess import run
 from rover_api.discover_utils import Config, get_time_str
 from os import mkdir
 from os.path import exists
+from itertools import islice
 # import discover_depth_camera.DepthCamera as DepthCamera
 
 
@@ -122,4 +123,8 @@ class Lidar(Config):
         self._rosbag.close()
 
     def isAvailable(self):
-        super().isAvailable()
+        return super().isAvailable()
+
+    def getInfo(self):
+        info_dict = super().getInfo()
+        return dict(islice(info_dict.items(), 0, 8, 1))
