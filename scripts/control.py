@@ -16,6 +16,7 @@ from subprocess import run
 from rospy import Subscriber, loginfo, init_node, get_time, is_shutdown
 from std_msgs.msg import Float32, Bool
 from sensor_msgs.msg import CompressedImage
+from rosgraph_msgs.msg import Log
 import docker
 
 
@@ -24,19 +25,24 @@ DATA_FILE = "experiment_data"
 FINISHED = False
 
 
-def callback_check_position(message: CompressedImage):
+def callback_check_position(message):
     # TODO: Change to use RTK
     pass
 
 
 def callback_check_power(message: Float32):
-    if message.data < 10.0:
-        go_home()
+    loginfo(f"Battery power at {message.data}V.")
 
 
 def callback_get_finished(message: Bool):
     global FINISHED
     FINISHED = message.data
+
+
+def callback_rosout(message: Log):
+    with open("/experiment/rover_experiment.log", "a") as outfile:
+        outfile.write(f"{message.msg}\n")
+
 
 
 def check_power():
@@ -54,9 +60,10 @@ def go_home():
 
 
 def stop_container(container):
+    loginfo(f"Experiment finished. {container.name} has been stopped and removed.")
+    check_power()
     container.stop()
     container.remove()
-    loginfo(f"Experiment finished. {container.name} has been stopped and removed.")
 
 
 def is_time_up(start_time) -> bool:
@@ -116,7 +123,9 @@ def main():
 
     try:
         init_node("discover_control")
+        rosout_redirect = Subscriber("/rosout", Log, callback_log)
         loginfo("Control node started")
+        check_power()
         client, container = start_container(compose_file)
         Subscriber("/finished", Bool, callback_get_finished)
     except Exception:
