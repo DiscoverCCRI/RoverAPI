@@ -14,7 +14,7 @@ monitor on a schedule.
 from sys import argv
 from subprocess import run
 from rospy import Publisher, Subscriber, loginfo, init_node, get_time, \
-                  is_shutdown
+                  is_shutdown, sleep
 from std_msgs.msg import Float32, Bool
 from sensor_msgs.msg import CompressedImage
 from rosgraph_msgs.msg import Log
@@ -95,7 +95,7 @@ def start_autoshutdown(container):
     loginfo(f"Power level at {check_power()}, starting automatic shutdown.")
     finished_pub = Publisher("/finished", Bool, queue_size=10)
     finished_pub.publish(True)
-
+    sleep(5)
 
 
 def start_container(compose_file: str):
