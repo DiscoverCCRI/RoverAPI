@@ -13,7 +13,8 @@ monitor on a schedule.
 
 from sys import argv
 from subprocess import run
-from rospy import Subscriber, loginfo, init_node, get_time, is_shutdown
+from rospy import Publisher, Subscriber, loginfo, init_node, get_time, \
+                  is_shutdown
 from std_msgs.msg import Float32, Bool
 from sensor_msgs.msg import CompressedImage
 from rosgraph_msgs.msg import Log
@@ -31,8 +32,7 @@ def callback_check_position(message):
 
 
 def callback_check_power(message: Float32):
-    loginfo(f"Battery power at {message.data}V.")
-
+    return message.data
 
 def callback_get_finished(message: Bool):
     global FINISHED
@@ -60,8 +60,9 @@ def go_home():
 
 
 def stop_container(container):
-    loginfo(f"Experiment finished. {container.name} has been stopped and removed.")
-    check_power()
+    loginfo(f"Experiment finished. {container.name} has been stopped and 
+             removed.")
+    loginfo(f"Battery power at {check_power()}V.")
     container.stop()
     container.remove()
 
@@ -90,6 +91,13 @@ def save_data(container, src_dir: str, dest_file: str):
             outfile.write(chunk)
 
 
+def start_autoshutdown(container):
+    loginfo(f"Power level at {check_power()}, starting automatic shutdown.")
+    finished_pub = Publisher("/finished", Bool, queue_size=10)
+    finished_pub.publish(True)
+
+
+
 def start_container(compose_file: str):
     # start with compose (API doesn't support docker compose)
     run(f"docker compose -f {compose_file} up -d", shell=True)
@@ -106,7 +114,8 @@ def start_container(compose_file: str):
         return client, container
 
     loginfo(f"Starting experiment with compose file {compose_file}.")
-    
+   
+ 
 def upload_data(dest_link: str):
     # TODO: sort this thing out with team
     pass
@@ -125,9 +134,9 @@ def main():
         init_node("discover_control")
         rosout_redirect = Subscriber("/rosout", Log, callback_log)
         loginfo("Control node started")
-        check_power()
+        loginfo(f"Battery power at {check_power()}V.")
         client, container = start_container(compose_file)
-        Subscriber("/finished", Bool, callback_get_finished)
+        finished_sub = Subscriber("/finished", Bool, callback_get_finished)
     except Exception:
         return
 
@@ -145,11 +154,9 @@ def main():
             return
 
         else:
-            if not ("-nl" in argument) and not ("--no-life-alert" in argument):
-                check_position()
-            if not ("-np" in argument) and not ("--no-power" in argument):
-                check_power()
-
+            if check_power() < 9.5:
+                start_autoshutdown(container)    
+	            
 
 if __name__ == "__main__":
     main()
