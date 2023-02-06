@@ -38,20 +38,27 @@ class Rover:
         (deg/s) for a given number of seconds. The max velocity is ~45 deg/s.
     """
 
-    def __init__(self):
+    def __init__(self, subscribe=True, callback_func=None)
         try:
             init_node("discover_rover")
         finally:
             loginfo("Rover node started!")
             self._bag_open = False
+            self.callback_func = callback_func
+            if subscribe:
+                self.__subscribe_to_vel()
+            
             self._rosbag = None
-            self.__subscribe_to_vel()
+
        
 
-    def __subscribe_to_vel(self):
+    def subscribe_to_vel(self):
         Subscriber("/cmd_vel", Twist, self.__callback_get_vel)
         
     def __callback_get_vel(self, msg: Twist):
+        if self.callback_func is not None:
+            self.callback_func()
+
         if self._bag_open:
             self._rosbag.write("/cmd_vel", msg)
        

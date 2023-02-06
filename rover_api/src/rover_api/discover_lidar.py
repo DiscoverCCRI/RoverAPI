@@ -67,7 +67,7 @@ class Lidar:
 
     def __callback_get_scan(self, message: LaserScan):
         if self.callback_func is not None:
-            self.callback_func(message)
+            self.callback_func()
 
         if(self._bag_open):
             self._rosbag.write("/scan", message)
