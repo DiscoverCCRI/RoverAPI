@@ -40,9 +40,8 @@ class Rover(Config):
 
     def __init__(self):
         try:
-            init_node("discover_rover")
+            loginfo("Rover initialized!")
         finally:
-            loginfo("Rover node started!")
             self._bag_open = False
             self._rosbag = None
             self.__subscribe_to_vel()

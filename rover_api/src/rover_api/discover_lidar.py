@@ -40,7 +40,6 @@ class Lidar(Config):
 
     def __init__(self):
         try:
-            init_node("discover_rover")
             loginfo("Lidar initialized!")
         finally:
             self._scan_buffer = []

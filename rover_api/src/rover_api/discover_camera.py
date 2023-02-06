@@ -33,7 +33,6 @@ class Camera(Config):
 
     def __init__(self):
         try:
-            init_node("discover_rover")
             loginfo("Camera initialized!")
         finally:
             self._img_buffer = []
