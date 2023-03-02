@@ -1,4 +1,5 @@
-from rospy import Time, Subscriber
+from rospy import Time, Subscriber, Publisher
+from std_msgs.msg import Bool
 from sensor_msgs.msg import CameraInfo, LaserScan
 from nav_msgs.msg import Odometry
 from datetime import datetime
@@ -44,15 +45,18 @@ class Config:
     def getInfo(self):
 
         if self.sensor_type == "camera":
-            Subscriber("/camera/camera_info", CameraInfo, self._callback_get_info)
+            Subscriber("/camera/camera_info", CameraInfo, self.
+                       _callback_get_info)
 
         elif self.sensor_type == "lidar":
             Subscriber("/scan", LaserScan, self._callback_get_info)
         
         elif self.sensor_type == "rover":
-            Subscriber("/wheel_odom_with_covariance", Odometry, self._callback_get_info)
+            Subscriber("/wheel_odom_with_covariance", Odometry, self._callback_
+                       get_info)
 
-        self.sensor_info = message_converter.convert_ros_message_to_dictionary(self.sensor_info)
+        self.sensor_info = message_converter.convert_ros_message_to_dictionary(
+                                                              self.sensor_info)
         return self.sensor_info
 
     def _callback_get_info(self, message):
@@ -66,3 +70,9 @@ def get_time_str(time: Time, extension: str) -> str:
     # convert time object to string
     time_str = py_time.strftime("%d-%m-%Y_%H:%M:%S")
     return DATA_DIR + time_str + extension
+
+
+def finish_experiment():
+    
+    pub = Publisher("/finished", Bool, queue_size=10)
+    pub.publish(True)
