@@ -41,8 +41,8 @@ class Camera(Config):
             self.callback_func = callback
             if subscribe:
                 self.subscribe_to_image_topic()
-            if not exists("photos/"):
-                mkdir("photos/")
+            if not exists("/experiment/photos/"):
+                mkdir("/experiment/photos/")
 
             # allows the buffer to store an entire image before init is over
             sleep(1)
