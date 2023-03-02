@@ -9,7 +9,6 @@ class GPS:
 
     def __init__(self):
         try:
-            init_node("discover_rover")
             loginfo("GPS listener started")
         finally:
             self.__subscribe_to_gps()
