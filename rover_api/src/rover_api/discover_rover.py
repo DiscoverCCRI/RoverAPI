@@ -2,10 +2,10 @@ from math import radians
 from rospy import Time, init_node, Publisher, Subscriber, get_time, loginfo
 from geometry_msgs.msg import Twist
 from rosbag import Bag
-from rover_api.discover_utils import get_time_str
+from rover_api.discover_utils import get_time_str, Config
 
 
-class Rover:
+class Rover(Config):
 
     """
     A class used to instantiate and drive LeoRovers
@@ -40,13 +40,12 @@ class Rover:
 
     def __init__(self):
         try:
-            init_node("discover_rover")
+            loginfo("Rover initialized!")
         finally:
-            loginfo("Rover node started!")
             self._bag_open = False
             self._rosbag = None
             self.__subscribe_to_vel()
-       
+            super().__init__() 
 
     def __subscribe_to_vel(self):
         Subscriber("/cmd_vel", Twist, self.__callback_get_vel)
@@ -89,3 +88,9 @@ class Rover:
     def stop_recording(self):
         self._bag_open = False
         self._rosbag.close()
+
+    def isAvailable(self):
+        return super().isAvailable()
+
+    def getInfo(self):
+        return super().getInfo()

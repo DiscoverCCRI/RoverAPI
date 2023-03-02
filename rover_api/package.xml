@@ -2,6 +2,7 @@
 <package format="2">
   <name>rover_api</name>
   <version>0.0.0</version>
+
   <description>The rover_api package</description>
 
   <!-- One maintainer tag required, multiple allowed, one person per tag -->

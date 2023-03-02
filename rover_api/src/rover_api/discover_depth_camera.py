@@ -34,7 +34,6 @@ class DepthCamera:
 
     def __init__(self):
         try:
-            init_node("discover_rover")
             loginfo("Depth Camera initialized!")
         finally:
             self._depth_buffer = []
