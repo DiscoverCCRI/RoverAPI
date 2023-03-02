@@ -11,6 +11,7 @@ from itertools import islice
 # import discover_depth_camera.DepthCamera as DepthCamera
 
 
+
 class Lidar(Config):
     """
     A class for instantiating and using the rplidar a2
@@ -38,18 +39,23 @@ class Lidar(Config):
     currently open.
     """
 
-    def __init__(self):
+    def __init__(self, subscribe=True, callback=None):
         try:
             loginfo("Lidar initialized!")
         finally:
             self._scan_buffer = []
             self._bag_open = False
             self._rosbag = None
-            self.__subscribe_to_scan()
+
+            if subscribe:
+                self.__subscribe_to_scan()
+            self.callback_func = callback
             
+            
+            # self._map_launch = self.__init_launch()
+            self.__subscribe_to_scan()   
             # TODO: figure out why this is in here
             # self._map_launch = self.__init_launch()
-
             # TODO: figure out why this is broken
             # if not exists("/experiment/maps/"):
             #     mkdir("/experiment/maps")
@@ -64,10 +70,13 @@ class Lidar(Config):
 
         return lp.projectLaser(message)
 
-    def __subscribe_to_scan(self):
+    def subscribe_to_scan(self):
         Subscriber("/scan", LaserScan, self.__callback_get_scan)
 
     def __callback_get_scan(self, message: LaserScan):
+        if self.callback_func is not None:
+            self.callback_func()
+
         if(self._bag_open):
             self._rosbag.write("/scan", message)
 
@@ -77,25 +86,7 @@ class Lidar(Config):
         self._scan_buffer.append(message)
 
     def get_latest_scan(self):
-
-        laser_msg = self._scan_buffer[-1]
-
-        file_name = get_time_str(laser_msg.header.stamp, ".scan")
-
-        with open(file_name, 'w', encoding='utf-8') as outfile:
-            outfile.write("Sequence: " + str(laser_msg.header.seq))
-            outfile.write("\nStamp: " + str(laser_msg.header.stamp))
-            outfile.write("\nFrame ID: " + str(laser_msg.header.frame_id))
-            outfile.write("\nAngle Min: " + str(laser_msg.angle_min))
-            outfile.write("\nAngle Max: " + str(laser_msg.angle_max))
-            outfile.write("\nAngle Increment: "
-                          + str(laser_msg.angle_increment))
-            outfile.write("\nTime Increment: " + str(laser_msg.time_increment))
-            outfile.write("\nScan Time: " + str(laser_msg.scan_time))
-            outfile.write("\nRange Min: " + str(laser_msg.range_min))
-            outfile.write("\nRange Max: " + str(laser_msg.range_max))
-            outfile.write("\nRanges: " + str(laser_msg.ranges))
-            outfile.write("\nIntensities: " + str(laser_msg.intensities))
+        return self._scan_buffer[-1] 
 
     def __init_launch(self):
         uuid = roslaunch.rlutil.get_or_generate_uuid(None, False)
@@ -121,6 +112,9 @@ class Lidar(Config):
         self._bag_open = False
         self._rosbag.close()
 
+
+    # TODO: figure out the different modes of the lidar, how to stop and start
+    # external launch files, and if it is worth it to let the user change mode
     def isAvailable(self):
         return super().isAvailable()
 
