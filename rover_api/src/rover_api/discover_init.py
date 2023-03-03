@@ -12,3 +12,7 @@ class ExperimentInitializer():
     def _callback(self, msg):
         if msg.data:
             self.callback_func()
+            
+    
+    def set_callback(self, callback_func):
+        self.callback_func = callback_func
