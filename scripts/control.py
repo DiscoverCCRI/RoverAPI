@@ -17,7 +17,7 @@ from rospy import Subscriber, loginfo, init_node, get_time, is_shutdown
 from std_msgs.msg import Float32, Bool
 from sensor_msgs.msg import CompressedImage
 import docker
-
+from rover_api.discover_init import Experimenter
 
 DATA_DIR = "/experiment"
 DATA_FILE = "experiment_data"
@@ -53,10 +53,10 @@ def go_home():
     pass
 
 
-def stop_container(container):
+def stop_container(container, experimenter):
     container.stop()
     container.remove()
-    loginfo(container.name + " has been stopped and removed.")
+    experimenter.log(container.name + " has been stopped and removed.")
 
 
 def is_time_up(start_time) -> bool:
@@ -73,11 +73,11 @@ def life_alert():
     pass
 
 
-def save_data(container, src_dir: str, dest_file: str):
+def save_data(container, src_dir: str, dest_file: str, experimenter):
     # make sure the users know to put experiment data in /experiment
     with open(dest_file, "wb") as outfile:
         bits, stat = container.get_archive(src_dir, encode_stream=True)
-        loginfo(stat)
+        experimenter.log(stat)
 
         for chunk in bits:
             outfile.write(chunk)
@@ -106,6 +106,7 @@ def upload_data(dest_link: str):
 
 def main():
     # start rosnode
+    experimenter = Experimenter()
     compose_file = "/home/pi/leorover-base-image/docker-compose.yaml"
     for argument in argv:
         if "-c" in argument:
@@ -115,7 +116,7 @@ def main():
 
     try:
         init_node("discover_control")
-        loginfo("Control node started")
+        experimenter.log("Control node started")
         client, container = start_container(compose_file)
         Subscriber("/finished", Bool, callback_get_finished)
     except Exception:
@@ -129,7 +130,7 @@ def main():
     # loop through all checks while rospy is active (which is always for Leo)
     while not (is_shutdown()):
         if FINISHED:
-            save_data(container, DATA_DIR, DATA_FILE + ".tar.gz")
+            save_data(container, DATA_DIR, DATA_FILE)
             # upload_data(dest_link)
             stop_container(container)
             return

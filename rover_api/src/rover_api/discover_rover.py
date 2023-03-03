@@ -96,8 +96,9 @@ class Rover(Config):
         self._bag_open = False
         self._rosbag.close()
 
-    def isAvailable(self):
-        return super().isAvailable()
-
     def getInfo(self):
         return super().getInfo()
+
+    def __isAvailable(self):
+        return super().isAvailable()
+

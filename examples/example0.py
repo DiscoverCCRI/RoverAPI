@@ -3,21 +3,10 @@
 from rover_api.discover_rover import Rover
 from rover_api.discover_camera import Camera
 from rover_api.discover_lidar import Lidar
-from rover_api.discover_init import ExperimentInitializer
 from rover_api.discover_utils import finish_experiment
 
 
-def finished_cb():
-
-    # Temporary Stub Return
-    pass
-
-
 def main():
-
-    # initialize the experiment with a function that will be called when it
-    # is over
-    init = ExperimentInitializer(finished_cb())
     
     # initialize the objects to control the hardware
     rover = Rover()
