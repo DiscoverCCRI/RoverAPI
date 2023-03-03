@@ -62,7 +62,7 @@ class Config:
     def _callback_get_info(self, message):
        self.sensor_info = message 
 
-
+# TODO: just make this current time no matter what
 def get_time_str(time: Time, extension: str) -> str:
     # convert time to a python datetime object
     py_time = datetime.fromtimestamp(time.to_time())
