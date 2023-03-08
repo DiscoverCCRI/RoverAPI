@@ -1,4 +1,5 @@
 from rospy import Time, Subscriber, Publisher
+from time import time
 from std_msgs.msg import Bool
 from sensor_msgs.msg import CameraInfo, LaserScan
 from nav_msgs.msg import Odometry
@@ -52,8 +53,8 @@ class Config:
             Subscriber("/scan", LaserScan, self._callback_get_info)
         
         elif self.sensor_type == "rover":
-            Subscriber("/wheel_odom_with_covariance", Odometry, self._callback_
-                       get_info)
+            Subscriber("/wheel_odom_with_covariance", Odometry, 
+                       self._callback_get_info)
 
         self.sensor_info = message_converter.convert_ros_message_to_dictionary(
                                                               self.sensor_info)
@@ -63,9 +64,12 @@ class Config:
        self.sensor_info = message 
 
 # TODO: just make this current time no matter what
-def get_time_str(time: Time, extension: str) -> str:
-    # convert time to a python datetime object
-    py_time = datetime.fromtimestamp(time.to_time())
+def get_time_str(in_time: Time=None, extension: str='') -> str:
+    if in_time is not None:
+        # convert time to a python datetime object
+        py_time = datetime.fromtimestamp(in_time.to_time())
+    else:
+        py_time = datetime.fromtimestamp(time())
 
     # convert time object to string
     time_str = py_time.strftime("%d-%m-%Y_%H:%M:%S")
