@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+
+
 from rover_api.discover_rover import Rover
 from rover_api.discover_camera import Camera
 from rover_api.discover_lidar import Lidar
@@ -31,52 +33,46 @@ def take_video(cam, num_images):
     num_images[0] += 1
 
 
-def main():
-
-    # initialize the objects to control the hardware
-    rover = Rover()
-    lidar = Lidar(callback=None, convert=True, subscribe=False)
-    cam = Camera()
+# initialize the objects to control the hardware
+rover = Rover()
+lidar = Lidar(callback=None, convert=True, subscribe=False)
+cam = Camera()
     
-    # declare number of images as a list so that the value can be passed back
-    # after the anonymous function has been called
-    num_images = [0]
+# declare number of images as a list so that the value can be passed back
+# after the anonymous function has been called
+num_images = [0]
     
-    # initialize the experiment with a function that will be called when it
-    # is over
-    # we must instiantiate an initializer object before we make any calls to
-    # other objects
-    init = ExperimentInitializer(lambda: finished_cb(num_images))
+# initialize the experiment with a function that will be called when it
+# is over
+# we must instiantiate an initializer object before we make any calls to
+# other objects
+init = ExperimentInitializer(lambda: finished_cb(num_images))
     
-    # set the callback - this means that everytime the rover's camera has a 
-    # new image, this function will be called
-    # it is initialized as a lambda so values can be changed within the 
-    # function
-    cam.set_callback(lambda: take_video(cam, num_images))
+# set the callback - this means that everytime the rover's camera has a 
+# new image, this function will be called
+# it is initialized as a lambda so values can be changed within the 
+# function
+cam.set_callback(lambda: take_video(cam, num_images))
 
 
-    # record the current time to a file
-    with open("/experiment/information.txt", "w", "utf-8") as outfile:
-        outfile.write(get_time_str())
+# record the current time to a file
+with open("/experiment/information.txt", "w", "utf-8") as outfile:
+    outfile.write(get_time_str())
 
-    # start a recording of the lidar data
-    lidar.subscribe_to_scan()
-    lidar.start_recording()
+# start a recording of the lidar data
+lidar.subscribe_to_scan()
+lidar.start_recording()
 
-    # drive in a 1 meter square
-    for i in range(4):
-        # drive forward at a rate of 0.2 m/s for 5s
-        rover.move_forward(0.2, 5)
+# drive in a 1 meter square
+for i in range(4):
+    # drive forward at a rate of 0.2 m/s for 5s
+    rover.move_forward(0.2, 5)
         
-        # save an image of what the rover sees
-        cam.get_jpg()
+    # save an image of what the rover sees
+    cam.get_jpg()
 
-        # turn right at a rate of 15 deg/s for 6s
-        rover.turn_right(15, 6) 
+    # turn right at a rate of 15 deg/s for 6s
+    rover.turn_right(15, 6) 
 
-    # finish the experiment - this will automatically call our finished_cb func
-    finish_experiment()
-
-
-if __name__ == "__main__":
-    main()
+# finish the experiment - this will automatically call our finished_cb func
+finish_experiment()
