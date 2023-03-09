@@ -10,7 +10,7 @@
 
 **Contents:**
 <ol type="1">
-  <li><a href="https://github.com/DiscoverCCRI/RoverAPI/examples#1-writing-the-code">Writing the Code</a></li>
+  <li><a href="examples/example0.md#1-writing-the-code">Writing the Code</a></li>
   <ol type="1">
     <li><a href="https://github.com/DiscoverCCRI/RoverAPI/examples#11-the-code">The Code</a></li>
     <li><a href="https://github.com/DiscoverCCRI/RoverAPI/examples#12-explanation">Explanation</a></li>
