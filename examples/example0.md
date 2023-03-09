@@ -4,9 +4,9 @@
 
 **Tutorial Level:** Beginner
 
-**Previous Tutorial:** [Getting Started](examples/starting.md)
+**Previous Tutorial:** [Getting Started](starting.md)
 
-**Next Tutorial:** [Utilizing More Features](examples/example1.md)
+**Next Tutorial:** [Utilizing More Features](example1.md)
 
 **Contents:**
 <ol type="1">
