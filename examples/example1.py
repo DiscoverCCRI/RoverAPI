@@ -12,11 +12,9 @@ def finished_cb(num_images):
     # we call the lidar functions necessary to save the data within the 
     # finished function so that if, for some reason, the experiment is 
     # prematurely ended, the lidar still saves all of its data
+    
     # stop the recording
     lidar.stop_recording()
-
-    # convert the laserscan rosbag to a pcd file
-    lidar.convert_to_pcd()
     
     # write the time at the end of the experiment at the end of the file
     # along with the total number of frames for our video
@@ -37,7 +35,7 @@ def main():
 
     # initialize the objects to control the hardware
     rover = Rover()
-    lidar = Lidar()
+    lidar = Lidar(callback=None, convert=True, subscribe=False)
     cam = Camera()
     
     # declare number of images as a list so that the value can be passed back
@@ -61,7 +59,8 @@ def main():
     with open("/experiment/information.txt", "w", "utf-8") as outfile:
         outfile.write(get_time_str())
 
-    # take a rosbag recording of the lidar data
+    # start a recording of the lidar data
+    lidar.subscribe_to_scan()
     lidar.start_recording()
 
     # drive in a 1 meter square
