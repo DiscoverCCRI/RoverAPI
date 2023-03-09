@@ -10,34 +10,40 @@
 
 **Contents:**
 <ol type="1">
-  <li><a href="examples/example0.md#1-writing-the-code">Writing the Code</a></li>
+  <li><a href="#1">Writing the Code</a></li>
   <ol type="1">
-    <li><a href="https://github.com/DiscoverCCRI/RoverAPI/examples#11-the-code">The Code</a></li>
-    <li><a href="https://github.com/DiscoverCCRI/RoverAPI/examples#12-explanation">Explanation</a></li>
+    <li><a href="#1.1">The Code</a></li>
+    <li><a href="#1.2">Explanation</a></li>
   </ol>
 </ol>
 
 
 
+<div id="1"></div>
 
 ### 1. Writing the Code
 
 This code will make use of DiscoverCCRI's [RoverAPI](https://github.com/DiscoverCCRI/RoverAPI), which is designed to make operation of DiscoverCCRI's 
 rovers easy. If you are unfamiliar with the Discover project, please check out our [website](https://discoverccri.org) to learn more. The tutorial 
 assumes that you have already set up a development based on the [previous tutorial](examples/starting.md).
+<p>&nbsp;</p><p>&nbsp;</p>
+
+<div id="1.1"></div>
 
 #### 1.1 The Code
 First, access your development environment using the instructions from the [previous tutorial](examples/starting.md), open the terminal and 
 change into the beginner_tutorials directory you created:
 ```
 cd ~/beginner_tutorials
-```
+```  
+<p>&nbsp;</p>
 
 Download the python code for this tutorial and make it an executable file:
 ```
 wget https://github.com/DiscoverCCRI/RoverAPI/examples/first_script.py
 chmod +x first_script.py
 ```
+<p>&nbsp;</p>
 
 You can view and edit this code with `vim first_script.py` or view the code below:
 ```
@@ -77,6 +83,10 @@ lidar.stop_recording()
 # finish the experiment - this will automatically call our finished_cb func
 finish_experiment()
 ```
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+
+<div id="1.2"></div>
 
 #### 1.2 Explanation
 
@@ -85,6 +95,7 @@ finish_experiment()
 ```
 Every script you write will contain this [shebang](https://en.wikipedia.org/wiki/Shebang_(Unix)), which lets the computer know which type of interpreter to 
 use when running scripts as executables.
+<p>&nbsp;</p>
 
 ```
 from rover_api.discover_rover import Rover
@@ -94,6 +105,7 @@ from rover_api.discover_utils import finish_experiment
 ```
 For this experiment, you will need to access the rover's lidar, camera, and movement capabilities. Additionally, you will need to use the finish_experiment() 
 function to let the system know that your experiment is done.
+<p>&nbsp;</p>
 
 ```
 # initialize the objects to control the hardware
@@ -102,13 +114,15 @@ lidar = Lidar()
 cam = Camera()
 ```
 First, you will create the objects to actually access and control the rover's hardware.
+<p>&nbsp;</p>
 
 ```
 # take a rosbag recording of the lidar data
 lidar.start_recording()
 ```
-Next, you will start recording the data from the lidar. The data will be saved to a [rosbag](http://wiki.ros.org/rosbag). If you are unfamiliar with ROS,
+Next, you will start recording the data from the lidar. The data will be saved to a [rosbag](http://wiki.ros.org/rosbag). If you are unfamiliar with [ROS](https://ros.org),
 that is alright. In the future, we will save the lidar data to a more common format.
+<p>&nbsp;</p>
 
 ```
 # drive in a 1 meter square
@@ -126,12 +140,14 @@ You will tell the rover to drive forward for 5 seconds at a rate of 0.2 meters p
 Then you will tell the rover to save a .jpg image of what the camera is seeing. These images will automatically be saved to the `/experiment` directory. 
 After taking the photo, the rover will turn right at a rate of 15 degrees for 6 seconds, making a complete 90 degree turn. 
 You will tell the rover to repeat this series of steps 4 times, driving in a 1 meter by 1 meter square.
+<p>&nbsp;</p>
 
 ```
 # stop the recording
 lidar.stop_recording()
 ```
 Next, you will tell the lidar to stop recording. This will save the rosbag file to the `/experiment` directory.
+<p>&nbsp;</p>
 
 ```
 # finish the experiment - this will automatically call our finished_cb func
@@ -139,12 +155,4 @@ finish_experiment()
 ```
 Finally, you will tell the system that you are finished running your experiment. This allows the system to shut down the docker container that your 
 code is running in, and saves the `/experiment` container with all of your data.
-
-
-
-
-
-
-
-
-
+<p>&nbsp;</p>
