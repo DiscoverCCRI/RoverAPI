@@ -1,5 +1,5 @@
 from sensor_msgs.msg import LaserScan, PointCloud2
-from rospy import loginfo, sleep, Subscriber, init_node, Time
+from rospy import loginfo, sleep, Subscriber, init_node, Time, Publisher
 import laser_geometry.laser_geometry as lg
 from rosbag import Bag
 import roslaunch
@@ -8,7 +8,6 @@ from rover_api.discover_utils import Config, get_time_str
 from os import mkdir
 from os.path import exists
 from itertools import islice
-# import discover_depth_camera.DepthCamera as DepthCamera
 
 
 
@@ -39,78 +38,72 @@ class Lidar(Config):
     currently open.
     """
 
-    def __init__(self, subscribe=True, callback=None):
+    def __init__(self, callback=None, convert=False, subscribe=True):
         try:
             loginfo("Lidar initialized!")
         finally:
+            super().__init__()
             self._scan_buffer = []
             self._bag_open = False
             self._rosbag = None
-
-            if subscribe:
-                self.__subscribe_to_scan()
+            self._convert = convert
+            self._lp = None
+            self._pc_pub = None
             self.callback_func = callback
             
+            if self._convert:
+                print("hello")
+                self._lp = lg.LaserProjection()
+                self._pc_pub = Publisher("/pointcloud", PointCloud2, 
+                                                                 queue_size=10)
+            if subscribe:
+                self.subscribe_to_scan()
             
-            # self._map_launch = self.__init_launch()
-            self.__subscribe_to_scan()   
-            # TODO: figure out why this is in here
-            # self._map_launch = self.__init_launch()
-            # TODO: figure out why this is broken
-            # if not exists("/experiment/maps/"):
-            #     mkdir("/experiment/maps")
-
+            if not exists("/experiment"):
+                mkdir("/experiment")
+            
             # give scan a chance to start publishing
             sleep(0.25)
-
-            super().__init__()
-
-    def convert_to_pointcloud(self, message: LaserScan) -> PointCloud2:
-        lp = lg.LaserProjection()
-
-        return lp.projectLaser(message)
 
     def subscribe_to_scan(self):
         Subscriber("/scan", LaserScan, self.__callback_get_scan)
 
     def __callback_get_scan(self, message: LaserScan):
+        pc2_msg = None 
+
         if self.callback_func is not None:
             self.callback_func()
+        
+        if self._convert:
+            pc2_msg = self._lp.projectLaser(message)
+            self._pc_pub.publish(pc2_msg)
+            self._scan_buffer.append(pc2_msg)
+        else:
+            self._scan_buffer.append(message)
 
         if(self._bag_open):
-            self._rosbag.write("/scan", message)
+            if self._convert:
+                self._rosbag.write("/pointcloud", pc2_msg)
+            else:
+                self._rosbag.write("/scan", message)
 
-        if len(self._scan_buffer) >= 30:
+        if len(self._scan_buffer) > 30:
             self._scan_buffer.pop(0)
-
-        self._scan_buffer.append(message)
-
+        
     def get_latest_scan(self):
         return self._scan_buffer[-1] 
-
-    def __init_launch(self):
-        uuid = roslaunch.rlutil.get_or_generate_uuid(None, False)
-        roslaunch.configure_logging(uuid)
-
-        launch = roslaunch.parent.ROSLaunchParent(uuid, ["/root/catkin_ws/src"
-                   + "/hector_slam/hector_slam_launch/launch/tutorial.launch"])
-        return launch
-
-    def start_mapping(self):
-        self._map_launch.start()
-
-    def stop_mapping(self):
-        run("rosrun map_server map_saver -f maps/" + get_time_str(Time.now(), ""),
-            shell=True)
-        self._map_launch.shutdown()
-
+    
     def start_recording(self):
         self._bag_open = True
-        self._rosbag = Bag("/experiment/" + get_time_str(Time.now(), "_scan.bag"), 'w')
+        self._rosbag = Bag(get_time_str(Time.now(), "_scan.bag"), 'w')
 
     def stop_recording(self):
         self._bag_open = False
         self._rosbag.close()
+        if self._convert:
+            print("hello")
+            run("rosrun pcl_ros bag_to_pcd /experiment/*.bag /pointcloud /experiment/pointclouds", shell=True)
+
 
 
     # TODO: figure out the different modes of the lidar, how to stop and start
