@@ -29,7 +29,7 @@ from rover_api.discover_init import ExperimentInitializer
 from rover_api.discover_utils import finish_experiment
 from rover_api.discover_utils import get_time_str
 
-def finished_cb(num_images):
+def finished_cb(lidar, num_images):
     
     # we call the lidar functions necessary to save the data within the 
     # finished function so that if, for some reason, the experiment is 
@@ -66,7 +66,7 @@ num_images = [0]
 # is over
 # we must instiantiate an initializer object before we make any calls to
 # other objects
-init = ExperimentInitializer(lambda: finished_cb(num_images))
+init = ExperimentInitializer(lambda: finished_cb(lidar, num_images))
     
 # set the callback - this means that everytime the rover's camera has a 
 # new image, this function will be called
