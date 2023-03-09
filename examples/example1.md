@@ -161,7 +161,7 @@ You will start by declaring a callback function that will be called when you sig
     lidar.stop_recording()
 ```
 Next, you will stop the recording. You will be calling the stop_recording() function within your finished function because this is the final function that will be called before the program exits, and you want your lidar to be capturing information for the duration of the program. Additionally, if the rover has some sort of problem, such as the battery becoming very low, your callback function will be called before it powers off. By placing the stop_recording() function call within this function, you ensure that your lidar data is properly saved.
-<p>&nbsp;></p>
+<p>&nbsp;</p>
 
 ```
     # write the time at the end of the experiment at the end of the file
