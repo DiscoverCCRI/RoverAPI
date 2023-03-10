@@ -38,7 +38,7 @@ class Rover(Config):
         (deg/s) for a given number of seconds. The max velocity is ~45 deg/s.
     """
 
-    def __init__(self, subscribe=False, callback_func=None)
+    def __init__(self, subscribe=False, callback_func=None):
         try:
             loginfo("Rover initialized!")
         finally:
