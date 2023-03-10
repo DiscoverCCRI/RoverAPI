@@ -54,7 +54,7 @@ cd ~/beginner_tutorials
 
 Download the python code for this tutorial and make it an executable file:
 ```
-wget https://github.com/DiscoverCCRI/RoverAPI/examples/first_script.py
+wget https://raw.githubusercontent.com/DiscoverCCRI/RoverAPI/main/examples/first_script.py
 chmod +x first_script.py
 ```
 <p>&nbsp;</p>
