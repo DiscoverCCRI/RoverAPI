@@ -87,9 +87,6 @@ lidar.start_recording()
 for i in range(4):
     # drive forward at a rate of 0.2 m/s for 5s
     rover.move_forward(0.2, 5)
-        
-    # save an image of what the rover sees
-    cam.get_jpg()
 
     # turn right at a rate of 15 deg/s for 6s
     rover.turn_right(15, 6) 
