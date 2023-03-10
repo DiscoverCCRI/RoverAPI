@@ -43,7 +43,7 @@ cd ~/beginner_tutorials
 
 Download the python code for this tutorial and make it an executable file:
 ```
-wget https://github.com/DiscoverCCRI/RoverAPI/examples/more_features.py
+wget https://raw.githubusercontent.com/DiscoverCCRI/RoverAPI/main/examples/more_features.py
 chmod +x more_features.py
 ```
 <p>&nbsp;</p>
