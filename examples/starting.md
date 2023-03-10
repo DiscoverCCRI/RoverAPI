@@ -4,7 +4,7 @@
 
 **Tutorial Level:** Beginner
 
-**Next Tutorial:** [First Script](example01.md)
+**Next Tutorial:** [First Script](example0.md)
 
 **Contents:**
 <ol type="1">
