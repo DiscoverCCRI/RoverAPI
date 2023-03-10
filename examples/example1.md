@@ -6,16 +6,18 @@
 
 **Previous Tutorial:** [First Script](example0.md)
 
-**Next Tutorial:** [Utilizing More Features](example1.md)
-
 **Contents:**
 <ol type="1">
   <li><a href="#1">Prerequisites</a></li>
+  <li><a href="#2">The Code</a></li>
   <ol type="1">
-    <li><a href="#1.1">The Code</a></li>
-    <li><a href="#1.2">Explanation</a></li>
+    <li><a href="#2.1">Writing the Code</a></li>
+    <li><a href="#2.2">Explanation</a></li>
   </ol>
 </ol>
+
+<p>&nbsp;</p><p>&nbsp;</p>
+
 
 <div id="1"></div>
 
@@ -28,11 +30,11 @@ Python's [anonymous function](https://docs.python.org/3/reference/expressions.ht
 
 ### 2. The Code
 This tutorial will build off of the [previous](example0.md) tutorial. You will utilize increased functionality within the API. 
-<p>&nbsp;</p>
+<p>&nbsp;</p><p>&nbsp;</p>
 
 <div id="2.1"></div>
 
-#### 2.2 Writing the Code
+#### 2.1 Writing the Code
 First, access your development environment, open the terminal and change into your beginner_tutorials directory:
 ```
 cd ~/beginner_tutorials
@@ -135,7 +137,7 @@ finish_experiment()
 ```
 #!/user/bin/env python3
 ```
-Every script you write will contain this [shebang](https://en.wikipedia.org/wiki/Shebang_(Unix)), which lets the computer know which type of interpreter to 
+Every script we write will contain this [shebang](https://en.wikipedia.org/wiki/Shebang_(Unix)), which lets the computer know which type of interpreter to 
 use when running scripts as executables.
 <p>&nbsp;</p>
 
@@ -147,20 +149,20 @@ from rover_api.discover_init import ExperimentInitializer
 from rover_api.discover_utils import finish_experiment
 from rover_api.discover_utils import get_time_str
 ```
-For this experiment, you will need to use the capabilities of yhe camera, lidar, and movement systems, as in the previous tutorial, along with the function signaling that your experiment has ended. Additionally you will need extra functionailty to set up your experiment, and get a formatted time string.
+For this experiment, we will need to use the capabilities of the camera, lidar, and movement systems, as in the previous tutorial, along with the function signaling that our experiment has ended. Additionally we will need extra functionailty to set up your experiment, and get a formatted time string.
 <p>&nbsp;</p>
 
 ```
 def finished_cb(lidar, num_images):
 ```
-You will start by declaring a callback function that will be called when you signal to the system that you are finished with our experiment. You will pass the lidar object and the number of images captured during this experiment as arguments.
+We will start by declaring a callback function that will be called when we signal to the system that we are finished with our experiment. We will pass the lidar object and the number of images captured during this experiment as arguments.
 <p>&nbsp;</p>
 
 ```
     # stop the recording
     lidar.stop_recording()
 ```
-Next, you will stop the recording. You will be calling the stop_recording() function within your finished function because this is the final function that will be called before the program exits, and you want your lidar to be capturing information for the duration of the program. Additionally, if the rover has some sort of problem, such as the battery becoming very low, your callback function will be called before it powers off. By placing the stop_recording() function call within this function, you ensure that your lidar data is properly saved.
+Next, we will stop the recording. We will be calling the stop_recording function within our finished function because this is the final function that will be called before the program exits, and we want your lidar to be capturing information for the entire duration of the program. Additionally, if the rover has some sort of problem, such as the battery becoming very low, our callback function will be called before it powers off. By placing the stop_recording() function call within this function, we ensure that our lidar data is properly saved.
 <p>&nbsp;</p>
 
 ```
@@ -172,13 +174,13 @@ Next, you will stop the recording. You will be calling the stop_recording() func
         outfile.write(get_time_str())
         outfile.write(f"Num of frames: {num_image[0]}")
 ```
-After stopping the lidar, you will want to write the total number of images collected by the rover during the experiment to a file, along with the current time. With this information, you can determine the length of the experiment. So, if you wanted to turn the series of images captured during this experiment into a video, you can determine the number of frames captured per second.
+After stopping the lidar, we will want to write the total number of images collected by the rover during the experiment to a file, along with the current time. With this information, we can determine the length of the experiment. So, if we wanted to turn the series of images captured during this experiment into a video, we can determine the number of frames captured per second.
 <p>&nbsp;</p>
 
 ```
 def take_video(cam, num_images):
 ```
-Now, you will define the camera's callback function. This function will be called whenever the camera produces new image data. The camera object and the current number of images will be passed as arguments.
+Now, we will define the camera's callback function. This function will be called whenever the camera produces new image data. The camera object and the current number of images will be passed as arguments.
 <p>&nbsp;</p>
 
 ```
@@ -186,7 +188,7 @@ Now, you will define the camera's callback function. This function will be calle
     cam.get_jpg()
     num_images[0] += 1
 ```
-Within your camera callback function, you will save the jpg of the new image produced by the camera, and increment the total number of images. Notice that you will treat the number of images as an item within a list, as the reason for this will be explained later.
+Within our camera callback function, we will save the jpg of the new image produced by the camera, and increment the total number of images. Notice that we will treat the number of images as an item within a list, as the reason for this will be explained later.
 <p>&nbsp;</p>
 
 
@@ -196,7 +198,7 @@ rover = Rover()
 lidar = Lidar(callback=None, convert=True, subscribe=False)
 cam = Camera()
 ```
-Now, you will initialize the objects allowing you to control the hardware. You will initialize your lidar to have no callback function (notice we only declared callbacks for finishing the experiment and the camera), set convert to true, and subscribe to false. Setting convert to true will store all of our lidar data as [.pcd](https://pointclouds.org/documentation/tutorials/pcd_file_format.html) files, which are more commonly used to store data than the rosbag you used in the [previous tutorial](example0.md). Setting the subscribe parameter to false will ensure that the lidar is only saving data for a certain period of time.
+Now, we will initialize the objects allowing us to control the hardware. We will initialize our lidar to have no callback function (notice we only declared callbacks for finishing the experiment and the camera), set convert to true, and subscribe to false. Setting convert to true will store all of our lidar data as [.pcd](https://pointclouds.org/documentation/tutorials/pcd_file_format.html) files, which are more commonly used to store data than the rosbag we used in the [previous tutorial](example0.md). Setting the subscribe parameter to false will ensure that the lidar is only saving data for a certain period of time.
 <p>&nbsp;</p>
 
 ```
@@ -204,7 +206,7 @@ Now, you will initialize the objects allowing you to control the hardware. You w
 # after the anonymous function has been called
 num_images = [0]
 ```
-Now, you will initialize the number of images variable. You will want to initialize this as an item in a list, as this will make sure that when you pass the item as a parameter in an anonymous function, that function can change the value.
+Now, we will initialize the number of images variable. We will want to initialize this as an item in a list, as this will make sure that when we pass the item as a parameter in an anonymous function, the function can change the value.
 <p>&nbsp;</p>
 
 ```
@@ -214,7 +216,7 @@ Now, you will initialize the number of images variable. You will want to initial
 # other objects
 init = ExperimentInitializer(lambda: finished_cb(lidar, num_images))
 ```
-Next, you will initialize the experiment by creating an ExperimentInitializer object. This object will set the callback function that you previously declared as finished_cb(), so that it will be called when the experiment is over, or when the rover has a critical error.
+Next, we will initialize the experiment by creating an ExperimentInitializer object. This object will set the callback function that we previously declared as finished_cb, so that it will be called when the experiment is over, or when the rover has a critical error. Since the initializer will most likely take lidar, camera, or rover objects as a parameter, we will often want to create it after we create other objects. However, since we want the our callback function to run in case of any problems, we should create our initializer object before doing anything else. 
 <p>&nbsp;</p>
 
 ```
@@ -224,7 +226,40 @@ Next, you will initialize the experiment by creating an ExperimentInitializer ob
 # function
 cam.set_callback(lambda: take_video(cam, num_images))
 ```
-Now, you will set the callback function for the camera, enabling it call this function whenever there is a new image from the camera. You will use an anonymous function to pass the callback function as it lets you pass parameters along with the function.
+Now, we will set the callback function for the camera, enabling it call this function whenever there is a new image from the camera. We will use an anonymous function to pass the callback function as it lets us pass parameters along with the function.
 <p>&nbsp;</p>
 
+```
+# record the current time to a file
+with open("/experiment/information.txt", "w", "utf-8") as outfile:
+    outfile.write(get_time_str())
+```
+We will record the starting time for the experiment to the same file in which we're storing data at the end of the experiment. 
+<p>&nbsp;</p>
 
+```
+# start a recording of the lidar data
+lidar.subscribe_to_scan()
+lidar.start_recording()
+```
+Now, we're going to tell our lidar to start taking in laser scan data, and to start a recording of that data, actually saving the information. Since, we set `convert=True` when initializing the lidar, the laser scan data will be saved in .pcd files.
+<p>&nbsp;</p>
+
+```
+# drive in a 1 meter square
+for i in range(4):
+    # drive forward at a rate of 0.2 m/s for 5s
+    rover.move_forward(0.2, 5)
+
+    # turn right at a rate of 15 deg/s for 6s
+    rover.turn_right(15, 6) 
+ ```
+ Next, we are actually going to move the rover in the same 1 meter by 1 meter square. Notice that for this script we are not telling the camera to capture images; it is doing that in the callback function we declared earlier.
+ <p>&nbsp;</p>
+ 
+ ```
+ # finish the experiment - this will automatically call our finished_cb func
+finish_experiment()
+```
+Finally, we will let the system know that we are done. This will automatically call the finished_cb function that we declared at the top of the script.
+<p>&nbsp;</p>
