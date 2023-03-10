@@ -48,7 +48,7 @@ class Camera(Config):
             sleep(1)
             super().__init__()
 
-    def __subscribe_to_image_topic(self):
+    def subscribe_to_image_topic(self):
         Subscriber("/camera/image_raw", Image, self.__callback_get_image)
 
     def __callback_get_image(self, message: Image):
