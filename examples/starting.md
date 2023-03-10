@@ -1,4 +1,4 @@
-# Rover API Example
+# Starting with RoverAPI
 
 **Description:** This is a guided example on how set up a development environment to use DiscoverCCRI's RoverAPI
 
