@@ -48,7 +48,7 @@ class Rover(Config):
                 self.__subscribe_to_vel()
             
             self._rosbag = None
-            self.__subscribe_to_vel()
+            self.subscribe_to_vel()
             super().__init__() 
 
     def subscribe_to_vel(self):
