@@ -1,4 +1,4 @@
-# Rover API Example
+# Rover API First Script
 
 **Description:** This is a guided example on how to write a simple python script to use DiscoverCCRI's RoverAPI
 
