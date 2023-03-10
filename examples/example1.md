@@ -1,6 +1,6 @@
 # Utilizing More Features
 
-**Description:** This is a guided example on how to write a more involved python script to use DiscoverCCRI's [RoverAPI](https://github.com/DiscoverCCRI/RoverAPI)
+**Description:** This is a guided example on how to write a more involved python script to use DiscoverCCRI's RoverAPI
 
 **Tutorial Level:** Beginner
 
