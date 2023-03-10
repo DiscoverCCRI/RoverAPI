@@ -4,11 +4,11 @@ from sensor_msgs.msg import Image
 from rospy import init_node, Time, Subscriber, sleep, loginfo
 import cv2
 from cv_bridge import CvBridge
-from rover_api.discover_utils import get_time_str
+from rover_api.discover_utils import Config, get_time_str
 from rosbag import Bag
 
 
-class Camera:
+class Camera(Config):
     """
     A class used to instantiate and use the raspicam on the LeoRover
     ...
@@ -31,26 +31,30 @@ class Camera:
         the image data to the image buffer
     """
 
-    def __init__(self):
+    def __init__(self, subscribe=True, callback=None):
         try:
-            init_node("discover_rover")
             loginfo("Camera initialized!")
         finally:
             self._img_buffer = []
-            self.__subscribe_to_image_topic()
             self._bag = None
             self._bag_open = False
-
-            if not exists("photos/"):
-                mkdir("photos/")
+            self.callback_func = callback
+            if subscribe:
+                self.subscribe_to_image_topic()
+            if not exists("/experiment/photos/"):
+                mkdir("/experiment/photos/")
 
             # allows the buffer to store an entire image before init is over
             sleep(1)
+            super().__init__()
 
     def __subscribe_to_image_topic(self):
         Subscriber("/camera/image_raw", Image, self.__callback_get_image)
 
     def __callback_get_image(self, message: Image):
+        if self.callback_func is not None:
+            self.callback_func()
+
         if(self._bag_open):
             self._bag.write("/camera/image_raw", message)
 
@@ -61,7 +65,10 @@ class Camera:
         # add the image message to the buffer
         self._img_buffer.append(message)
 
-    def take_photo(self):
+    def get_latest_image(self):
+        return self._img_buffer[-1]
+
+    def get_jpg(self):
         # create the bridge to translate image types
         bridge = CvBridge()
 
@@ -84,3 +91,9 @@ class Camera:
     def stop_recording(self):
         self._bag_open = False
         self._bag.close()
+
+    def isAvailable(self):
+        return super().isAvailable()
+
+    def getInfo(self):
+        return super().getInfo()
