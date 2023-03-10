@@ -1,4 +1,4 @@
-from rospy import Time, Subscriber, Publisher
+from rospy import Time, Subscriber, Publisher, init_node
 from time import time
 from std_msgs.msg import Bool
 from sensor_msgs.msg import CameraInfo, LaserScan
@@ -12,9 +12,12 @@ DATA_DIR = "/experiment/"
 class Config:
 
     def __init__(self):
-        self.sensor_type = ''
-        self.sensor_info = None
-        type_obj = str(type(self))
+        try:
+            init_node("discover")
+        finally:
+            self.sensor_type = ''
+            self.sensor_info = None
+            type_obj = str(type(self))
         
         if type_obj == "<class 'rover_api.discover_rover.Rover'>":
             self.sensor_type = "rover" 
