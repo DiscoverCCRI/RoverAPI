@@ -52,7 +52,6 @@ class Lidar(Config):
             self.callback_func = callback
             
             if self._convert:
-                print("hello")
                 self._lp = lg.LaserProjection()
                 self._pc_pub = Publisher("/pointcloud", PointCloud2, 
                                                                  queue_size=10)
@@ -101,7 +100,6 @@ class Lidar(Config):
         self._bag_open = False
         self._rosbag.close()
         if self._convert:
-            print("hello")
             run("rosrun pcl_ros bag_to_pcd /experiment/*.bag /pointcloud /experiment/pointclouds", shell=True)
 
 
