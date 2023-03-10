@@ -97,3 +97,6 @@ class Camera(Config):
 
     def getInfo(self):
         return super().getInfo()
+    
+    def set_callback(self, func):
+        self.callback_func = func
