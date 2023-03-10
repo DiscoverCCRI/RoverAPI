@@ -135,7 +135,7 @@ First, we will instantiate the objects to actually access and control the rover'
 lidar.start_recording()
 ```
 Next, we will start recording the data from the lidar. The data will be saved to a [rosbag](http://wiki.ros.org/rosbag). If you are unfamiliar with [ROS](https://ros.org),
-that is alright. In the future, we will save the lidar data to a more common format.
+that is alright. Nothing in this API requires you to know ROS, and in the future, we will save the lidar data to a more common format.
 <p>&nbsp;</p>
 
 ```
