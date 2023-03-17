@@ -43,8 +43,8 @@ def finished_cb(lidar, num_images):
     # we can use this information to determine the fps captured by
     # our rover, which should be somewhere between 24 and 28 fps
     with open("/experiment/information.txt", "a", encoding="utf-8") as outfile:
-        outfile.write(get_time_str())
-        outfile.write(f"Num of frames: {num_image[0]}")
+        outfile.write(f"{get_time_str()}\n")
+        outfile.write(f"Num of frames: {num_images[0]}\n")
 
 def take_video(cam, num_images):
     
@@ -77,7 +77,7 @@ cam.set_callback(lambda: take_video(cam, num_images))
 
 # record the current time to a file
 with open("/experiment/information.txt", "w", encoding="utf-8") as outfile:
-    outfile.write(get_time_str())
+    outfile.write(f"{get_time_str()}\n")
 
 # start a recording of the lidar data
 lidar.subscribe_to_scan()
