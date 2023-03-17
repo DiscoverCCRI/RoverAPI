@@ -1,4 +1,4 @@
-from rospy import Time, Subscriber, Publisher, init_node
+from rospy import Time, Subscriber, Publisher, init_node, sleep
 from time import time
 from std_msgs.msg import Bool
 from sensor_msgs.msg import CameraInfo, LaserScan
@@ -82,4 +82,5 @@ def get_time_str(in_time: Time=None, extension: str='') -> str:
 def finish_experiment():
     
     pub = Publisher("/finished", Bool, queue_size=10)
+    sleep(1)
     pub.publish(True)
