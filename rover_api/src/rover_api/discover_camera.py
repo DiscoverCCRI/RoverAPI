@@ -1,5 +1,6 @@
 from os.path import exists
-from os import mkdir
+from os import makedirs
+from subprocess import run
 from sensor_msgs.msg import Image
 from rospy import init_node, Time, Subscriber, sleep, loginfo
 import cv2
@@ -42,7 +43,7 @@ class Camera(Config):
             if subscribe:
                 self.subscribe_to_image_topic()
             if not exists("/experiment/photos/"):
-                mkdir("/experiment/photos/")
+                makedirs("/experiment/photos/")
 
             # allows the buffer to store an entire image before init is over
             sleep(1)
@@ -80,9 +81,11 @@ class Camera(Config):
 
         # convert time to a python datetime object
         img_str = get_time_str(img_msg.header.stamp, ".jpg")
-
+         
         # save image
         cv2.imwrite(img_str, img)
+
+        run("mv /experiment/*.jpg /experiment/photos/", shell=True)
 
     def start_recording(self):
         self._bag_open = True
