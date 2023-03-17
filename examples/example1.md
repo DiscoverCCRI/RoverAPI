@@ -61,7 +61,7 @@ from rover_api.discover_init import ExperimentInitializer
 from rover_api.discover_utils import finish_experiment
 from rover_api.discover_utils import get_time_str
 
-def finished_cb(num_images):
+def finished_cb(lidar, num_images):
     
     # we call the lidar functions necessary to save the data within the 
     # finished function so that if, for some reason, the experiment is 
@@ -74,9 +74,9 @@ def finished_cb(num_images):
     # along with the total number of frames for our video
     # we can use this information to determine the fps captured by
     # our rover, which should be somewhere between 24 and 28 fps
-    with open("/experiment/information.txt", "a", "utf-8") as outfile:
-        outfile.write(get_time_str())
-        outfile.write(f"Num of frames: {num_image[0]}")
+    with open("/experiment/information.txt", "a", encoding="utf-8") as outfile:
+        outfile.write(f"{get_time_str()}\n")
+        outfile.write(f"Num of frames: {num_images[0]}\n")
 
 def take_video(cam, num_images):
     
@@ -98,7 +98,7 @@ num_images = [0]
 # is over
 # we must instiantiate an initializer object before we make any calls to
 # other objects
-init = ExperimentInitializer(lambda: finished_cb(num_images))
+init = ExperimentInitializer(lambda: finished_cb(lidar, num_images))
     
 # set the callback - this means that everytime the rover's camera has a 
 # new image, this function will be called
@@ -108,8 +108,8 @@ cam.set_callback(lambda: take_video(cam, num_images))
 
 
 # record the current time to a file
-with open("/experiment/information.txt", "w", "utf-8") as outfile:
-    outfile.write(get_time_str())
+with open("/experiment/information.txt", "w", encoding="utf-8") as outfile:
+    outfile.write(f"{get_time_str()}\n")
 
 # start a recording of the lidar data
 lidar.subscribe_to_scan()
@@ -119,9 +119,6 @@ lidar.start_recording()
 for i in range(4):
     # drive forward at a rate of 0.2 m/s for 5s
     rover.move_forward(0.2, 5)
-        
-    # save an image of what the rover sees
-    cam.get_jpg()
 
     # turn right at a rate of 15 deg/s for 6s
     rover.turn_right(15, 6) 
@@ -170,9 +167,9 @@ Next, we will stop the recording. We will be calling the stop_recording function
     # along with the total number of frames for our video
     # we can use this information to determine the fps captured by
     # our rover, which should be somewhere between 24 and 28 fps
-    with open("/experiment/information.txt", "a", "utf-8") as outfile:
-        outfile.write(get_time_str())
-        outfile.write(f"Num of frames: {num_image[0]}")
+    with open("/experiment/information.txt", "a", encoding="utf-8") as outfile:
+        outfile.write(f"{get_time_str()}\n")
+        outfile.write(f"Num of frames: {num_images[0]}\n")
 ```
 After stopping the lidar, we will want to write the total number of images collected by the rover during the experiment to a file, along with the current time. With this information, we can determine the length of the experiment. So, if we wanted to turn the series of images captured during this experiment into a video, we can determine the number of frames captured per second.
 <p>&nbsp;</p>
@@ -231,8 +228,8 @@ Now, we will set the callback function for the camera, enabling it call this fun
 
 ```
 # record the current time to a file
-with open("/experiment/information.txt", "w", "utf-8") as outfile:
-    outfile.write(get_time_str())
+with open("/experiment/information.txt", "w", encoding="utf-8") as outfile:
+    outfile.write(f"{get_time_str()}\n")
 ```
 We will record the starting time for the experiment to the same file in which we're storing data at the end of the experiment. 
 <p>&nbsp;</p>
