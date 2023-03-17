@@ -82,7 +82,7 @@ class Camera(Config):
         img_str = get_time_str(img_msg.header.stamp, ".jpg")
 
         # save image
-        cv2.imwrite("photos/" + img_str, img)
+        cv2.imwrite("/experiment/photos/" + img_str, img)
 
     def start_recording(self):
         self._bag_open = True
