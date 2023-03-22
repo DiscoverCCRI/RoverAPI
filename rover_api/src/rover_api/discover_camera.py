@@ -39,6 +39,7 @@ class Camera(Config):
             self._img_buffer = []
             self._bag = None
             self._bag_open = False
+            self.num_jpg = 0
             self.callback_func = callback
             if subscribe:
                 self.subscribe_to_image_topic()
@@ -79,13 +80,14 @@ class Camera(Config):
         # convert to an OpenCV image object
         img = bridge.imgmsg_to_cv2(img_msg, desired_encoding='passthrough')
 
-        # convert time to a python datetime object
-        img_str = get_time_str(img_msg.header.stamp, ".jpg")
+        # get the file path to store image
+        img_str = f"/experiment/photos/{num_jpg}.jpg"
          
+        # update the number of jpgs
+        num_jpg += 1
+           
         # save image
         cv2.imwrite(img_str, img)
-
-        run("mv /experiment/*.jpg /experiment/photos/", shell=True)
 
     def start_recording(self):
         self._bag_open = True
