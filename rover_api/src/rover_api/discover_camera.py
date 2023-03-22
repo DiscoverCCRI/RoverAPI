@@ -81,10 +81,10 @@ class Camera(Config):
         img = bridge.imgmsg_to_cv2(img_msg, desired_encoding='passthrough')
 
         # get the file path to store image
-        img_str = f"/experiment/photos/{num_jpg}.jpg"
+        img_str = f"/experiment/photos/{self.num_jpg}.jpg"
          
         # update the number of jpgs
-        num_jpg += 1
+        self.num_jpg += 1
            
         # save image
         cv2.imwrite(img_str, img)
