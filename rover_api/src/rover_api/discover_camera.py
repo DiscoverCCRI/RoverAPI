@@ -12,27 +12,20 @@ from rosbag import Bag
 class Camera(Config):
     """
     A class used to instantiate and use the raspicam on the LeoRover
-    ...
-    Attributes:
-    -----------
-    img_buffer:
-        A list that contains the data of each image sent over the
-        /camera/image_raw/compressed topic. Each image is stored in an array of
-        unsigned 8-bit integers
-    Methods:
-    --------
-    take_photo():
-        Creates an OpenCV image from the latest image in the buffer
-    __subscribe_to_image_topic():
-        Creates a subscriber to subscribe to the /camera/image_raw
-        topic created by the raspicam node. Then continues to run
-        the function until the script is stopped
-    __callback_get_image(message: Image):
-        Gets the message from the /camera/image_raw topic and stores
-        the image data to the image buffer
     """
 
     def __init__(self, subscribe=True, callback=None):
+        """
+        @brief The constructor for the Camera class. Sets initial values
+        for attributes along with subscribing to image topic. Also creates
+        the experimental directories if needed.
+        @param self: The reference to the current object
+        @param subscribe: A boolean value indicating whether or not to
+        subscribe to the ROS image topic by default. Defaults to true.
+        @param callback: A function set to be called every time new image
+        data is published, and subscribe is True. Defaults to None.
+        @return: None
+        """
         try:
             loginfo("Camera initialized!")
         finally:
@@ -51,9 +44,27 @@ class Camera(Config):
             super().__init__()
 
     def subscribe_to_image_topic(self):
+        """
+        @brief Subscribes to the ROS image topic published from the camera.
+        If subscribe is set to False, call this function to get data from 
+        the camera.
+        @param self: A reference to the current object.
+        @return: None
+        """
         Subscriber("/camera/image_raw", Image, self.__callback_get_image)
 
     def __callback_get_image(self, message: Image):
+        """
+        @brief A helper function that is used to actually get image data.
+        If the start_recording function has been called, this function will
+        record image data to a rosbag file. If a callback function has been
+        set, this function will call the callback. It appends the latest image
+        data to an image buffer with a max length of 30 images.
+        @param self: A reference to the current object.
+        @param message: A sensor_msgs/Image object that corresponds to the
+        latest image.
+        @return: None
+        """
         if self.callback_func is not None:
             self.callback_func()
 
@@ -67,10 +78,24 @@ class Camera(Config):
         # add the image message to the buffer
         self._img_buffer.append(message)
 
-    def get_latest_image(self):
+    def get_latest_image(self) -> Image:
+        """
+        @brief A function that returns the latest image in the form of 
+        a sensor_msgs/Image object.
+        @param self: A reference to the current object.
+        @return: The latest image in the form of a sensor_msgs/Image object.
+        """
         return self._img_buffer[-1]
 
     def get_jpg(self):
+        """
+        @brief A function that uses OpenCV's CvBridge to convert a 
+        sensor_msgs/Image object to an OpenCV image object, which is then
+        saved as an .jpg file in the /experiment/photos directory. Images
+        are numbered sequentially from first to last.
+        @param self: A reference to the current object.
+        @return: None
+        """
         # create the bridge to translate image types
         bridge = CvBridge()
 
@@ -90,18 +115,50 @@ class Camera(Config):
         cv2.imwrite(img_str, img)
 
     def start_recording(self):
+        """
+        @brief A function that opens a new rosbag file to record all 
+        ROS messages published on the /camera/image_raw topic.
+        @param self: A reference to the current object.
+        @return: None
+        """
         self._bag_open = True
         self._bag = Bag(get_time_str(Time.now(), ".bag"), 'w')
 
     def stop_recording(self):
+        """
+        @brief A function that closes a previously opened rosbag file
+        that has records of ROS messages published on the /camera/image_raw
+        topic.
+        @param self: A reference to the current object.
+        @return: None
+        """
         self._bag_open = False
         self._bag.close()
 
-    def isAvailable(self):
+    def isAvailable(self) -> Bool:
+        """
+        @brief A function that returns whether or not the camera on the 
+        rover is available.
+        @param self: A reference to the current object.
+        @return: A boolean value representing if the camera is available.
+        """
         return super().isAvailable()
 
-    def getInfo(self):
+    def getInfo(self) -> str:
+        """
+        @brief A function that returns information about the camera on the
+        rover.
+        @param self: A reference to the current object.
+        @return: A string containing information about the camera.
+        """
         return super().getInfo()
     
     def set_callback(self, func):
+        """
+        @brief A function that sets the callback function to be called
+        whenever new images from the camera are available
+        @param self: A reference to the current object.
+        @param func: The new callback function
+        @return: None
+        """
         self.callback_func = func
