@@ -11,7 +11,9 @@ from rosbag import Bag
 
 class Camera(Config):
     """
-    A class used to instantiate and use the raspicam on the LeoRover
+    A class used to instantiate and use the raspicam on the LeoRover.
+    The camera is a 5 megapixel webcam with a 170-degree field of view.
+    Images are published at approximately 67 frames per second.
     """
 
     def __init__(self, subscribe=True, callback=None):
