@@ -13,7 +13,9 @@ from itertools import islice
 
 class Lidar(Config):
     """
-    A class for using the RPLidar A2.
+    A class for using the RPLidar A2. This is a two-dimensional lidar that
+    provides 360-degree range-finding capabilities. It operates at an 8k 
+    sampling frequency, with a 12 meter scan range and 10 Hz rotational speed.
     """
 
     def __init__(self, callback=None, convert=False, subscribe=True):
