@@ -248,7 +248,7 @@ class Lidar(Config):
         info_dict = super().get_info()
         return dict(islice(info_dict.items(), 0, 8, 1))
         
-        def set_callback(self, func):
+    def set_callback(self, func):
         """A function that sets the callback function to be called
         whenever new scans from the Lidar are available. The new callback
         function will not be called unless subscribe is set to True, or 
