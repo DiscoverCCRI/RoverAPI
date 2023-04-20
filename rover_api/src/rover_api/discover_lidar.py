@@ -19,7 +19,8 @@ class Lidar(Config):
     """
 
     def __init__(self, callback=None, convert=False, subscribe=True):
-        """The constructor for the Lidar class. 
+        """
+        The constructor for the Lidar class. 
         
         This function sets up all 
         attributes of the class, and subscribes to the proper topics to enable
@@ -78,7 +79,8 @@ class Lidar(Config):
             sleep(0.25)
 
     def subscribe_to_scan_topic(self):
-        """A function allowing the user to subscribe to the scan
+        """
+        A function allowing the user to subscribe to the scan
         topic at a time other than object instantiation.
         
         Parameters
@@ -133,7 +135,8 @@ class Lidar(Config):
             self._scan_buffer.pop(0)
         
     def get_latest_scan(self):
-        """A method which returns the latest LaserScan message object.
+        """
+        A method which returns the latest LaserScan message object.
         
         Parameters
         ----------
@@ -154,7 +157,8 @@ class Lidar(Config):
         return self._scan_buffer[-1] 
     
     def start_recording(self):
-        """A method which starts recording data from the lidar to a rosbag.
+        """
+        A method which starts recording data from the lidar to a rosbag.
         The bag is named /experiment/<time_at_start>_scan.bag.
         
         Parameters
@@ -175,7 +179,8 @@ class Lidar(Config):
         self._rosbag = Bag(get_time_str(Time.now(), "_scan.bag"), 'w')
 
     def stop_recording(self):
-        """A method which stops recording data from the lidar to a rosbag.
+        """
+        A method which stops recording data from the lidar to a rosbag.
         If convert was set to true in the constructor, the rosbag is converted
         to a pointcloud.
         
@@ -206,7 +211,8 @@ class Lidar(Config):
     # TODO: figure out the different modes of the lidar, how to stop and start
     # external launch files, and if it is worth it to let the user change mode
     def is_available(self):
-        """A method which lets the user know if the lidar is available on the rover.
+        """
+        A method which lets the user know if the lidar is available on the rover.
         
         Parameters
         ----------
@@ -217,7 +223,9 @@ class Lidar(Config):
         bool
             A boolean value specifying if the lidar is available for the user.
         
-        Examples
+        Examples autosummary_generate setting.
+/home/cjb873/Discover/RoverAPI/rover_api/src/rover_api/discover_camera.py:docstring of discover_camera.Camera:22: WARNING: autosummary: stub file not found 'discover_camera.Camera.get_jpg'. Check your autosummary_generate setting.
+
         --------
         >>> from rover_api.discover_lidar import Lidar
         >>> scanner = Lidar(subscribe=False)
@@ -227,7 +235,8 @@ class Lidar(Config):
         return super().is_available()
 
     def get_info(self):
-        """A method which gives the user info about the configuration of the lidar.
+        """
+        A method which gives the user info about the configuration of the lidar.
         Items like scan rate, and scan distance are included.
         
         Parameters
@@ -249,7 +258,8 @@ class Lidar(Config):
         return dict(islice(info_dict.items(), 0, 8, 1))
     
     def set_callback(self, func):
-        """A function that sets the callback function to be called
+        """
+        A function that sets the callback function to be called
         whenever new scans from the Lidar are available. The new callback
         function will not be called unless subscribe is set to True, or 
         subscribe_to_scan_topic() has been called.

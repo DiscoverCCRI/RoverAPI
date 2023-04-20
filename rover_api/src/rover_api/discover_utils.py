@@ -17,7 +17,8 @@ class Config:
     """
 
     def __init__(self):
-        """This constructor sets up the Config class by finding which
+        """
+        This constructor sets up the Config class by finding which
         type of class is extending the config class.
         
         Parameters
@@ -45,7 +46,8 @@ class Config:
             self.sensor_type = "camera"
 
     def is_available(self):
-        """Determines whether or not the given sensor is available.
+        """
+        Determines whether or not the given sensor is available.
         
         Parameters
         ----------
@@ -74,7 +76,8 @@ class Config:
         return available_flag
         
     def get_info(self):
-        """Returns information about the given sensor. Information is returned
+        """
+        Returns information about the given sensor. Information is returned
         in whatever format the sensor has chosen.
         
         Parameters
@@ -102,7 +105,8 @@ class Config:
         return self.sensor_info
 
     def _callback_get_info(self, message):
-        """This is a helper function that returns the information about the given sensor.
+        """
+        This is a helper function that returns the information about the given sensor.
         
         Parameters
         ----------
@@ -159,7 +163,8 @@ def get_time_str(in_time: Time=None, extension: str='') -> str:
 
 
 def finish_experiment():
-    """This function should be called whenever a user 
+    """
+    This function should be called whenever a user 
     experiment is finished. This will call the user's 
     finished callback function, doing whatever cleanup they
     may need. Additionally, this will be called when the rover

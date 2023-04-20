@@ -15,7 +15,8 @@ class Rover(Config):
     """
 
     def __init__(self, subscribe=False, callback_func=None):
-        """The constructor for the Rover class. 
+        """
+        The constructor for the Rover class. 
         
         Sets initial values for attributes.
         
@@ -53,7 +54,8 @@ class Rover(Config):
             super().__init__() 
 
     def subscribe_to_vel_topic(self):
-        """This function subscribes to the cmd_vel topic. This function only needs
+        """
+        This function subscribes to the cmd_vel topic. This function only needs
         to be called if there is a callback that should be called whenever
         the rover moves and/or data needs to be saved to a rosbag. In either
         event, this function must be called beforehand,or subcribe must be set to
@@ -76,7 +78,8 @@ class Rover(Config):
         Subscriber("/cmd_vel", Twist, self.__callback_get_vel)
         
     def __callback_get_vel(self, msg: Twist):
-        """This is a helper function to enable cmd_vel data to be written to an
+        """
+        This is a helper function to enable cmd_vel data to be written to an
         open rosbag file or to enable a callback function.
         
         Parameters
@@ -95,7 +98,8 @@ class Rover(Config):
             self._rosbag.write("/cmd_vel", msg)
        
     def drive(self, linear_vel: float, angular_vel: float, duration: float):
-        """ This function allows the rover to drive, either linearly or angularly.
+        """ 
+        This function allows the rover to drive, either linearly or angularly.
         
         Parameters
         ----------
@@ -134,7 +138,8 @@ class Rover(Config):
             pub.publish(twist)
 
     def move_forward(self, velocity: float, duration: float):
-        """A function that allows the rover to move forward.
+        """
+        A function that allows the rover to move forward.
         
         Parameters
         ----------
@@ -158,7 +163,8 @@ class Rover(Config):
         self.drive(velocity, 0, duration)
 
     def move_backward(self, velocity: float, duration: float):
-        """A function that allows the rover to move backward.
+        """
+        A function that allows the rover to move backward.
         
         Parameters
         ----------
@@ -182,7 +188,8 @@ class Rover(Config):
         self.drive(-velocity, 0, duration)
 
     def turn_left(self, angle: float, duration: float):
-        """A function that allows the rover to turn left.
+        """
+        A function that allows the rover to turn left.
         
         Parameters
         ----------
@@ -206,7 +213,8 @@ class Rover(Config):
         self.drive(0, angle, duration)
 
     def turn_right(self, angle: float, duration: float):
-        """A function that allows the rover to turn right.
+        """
+        A function that allows the rover to turn right.
         
         Parameters
         ----------
@@ -230,7 +238,8 @@ class Rover(Config):
         self.drive(0, -angle, duration)
         
     def start_recording(self):
-        """A function that opens a new rosbag file to record all 
+        """
+        A function that opens a new rosbag file to record all 
         ROS messages published on the /cmd_vel topic. For this to work
         it must be called in conjunction with subscribe_to_vel_topic(),
         or subscribe must be set to True in the constructor.
@@ -254,7 +263,8 @@ class Rover(Config):
         self._rosbag = Bag(get_time_str(Time.now(), "_vel.bag"), 'w')
 
     def stop_recording(self):
-        """A function that closes a previously opened rosbag file
+        """
+        A function that closes a previously opened rosbag file
         that has records of ROS messages published on the /cmd_vel
         topic.
         
@@ -279,7 +289,8 @@ class Rover(Config):
         self._rosbag.close()
 
     def get_info(self):
-        """A function that returns information about the rover.
+        """
+        A function that returns information about the rover.
         
         Parameters
         ----------
@@ -298,7 +309,8 @@ class Rover(Config):
         return super().get_info()
 
     def __is_available(self):
-        """A function that returns whether or not the rover is available.
+        """
+        A function that returns whether or not the rover is available.
         
         Parameters
         ----------
@@ -312,7 +324,8 @@ class Rover(Config):
         return super().is_available()
     
     def set_callback(self, func):
-        """A function that sets the callback function to be called whenever the rover moves.
+        """
+        A function that sets the callback function to be called whenever the rover moves.
         For the callback to be called, subscribe must be set to True in the constructor, or
         subscribe_to_vel_topic() must have been previously called.
         
