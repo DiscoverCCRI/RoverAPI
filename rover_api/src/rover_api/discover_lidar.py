@@ -248,4 +248,30 @@ class Lidar(Config):
         info_dict = super().get_info()
         return dict(islice(info_dict.items(), 0, 8, 1))
     
+    def set_callback(self, func):
+        """A function that sets the callback function to be called
+        whenever new scans from the Lidar are available. The new callback
+        function will not be called unless subscribe is set to True, or 
+        subscribe_to_scan_topic() has been called.
+        
+        Parameters
+        ----------
+        func : function
+            The new callback function
+        
+        Returns
+        -------
+        None
+        
+        Examples
+        --------
+        >>> from rover_api.discover_lidar import Lidar
+        >>> def cb_func():
+        >>>     print("New scan published")
+        >>> 
+        >>> scanner = Lidar(callback=None, subscribe=False)
+        >>> scanner.set_callback(cb_func)
+        >>> scanner.subscribe_to_scan_topic()
+        """
+        self.callback_func = func
     
