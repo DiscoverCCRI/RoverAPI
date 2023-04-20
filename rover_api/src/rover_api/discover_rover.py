@@ -311,7 +311,7 @@ class Rover(Config):
         """
         return super().is_available()
     
-     def set_callback(self, func):
+    def set_callback(self, func):
         """A function that sets the callback function to be called whenever the rover moves.
         For the callback to be called, subscribe must be set to True in the constructor, or
         subscribe_to_vel_topic() must have been previously called.
