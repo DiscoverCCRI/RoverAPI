@@ -49,7 +49,7 @@ class Rover(Config):
                 makedirs("/experiment/photos/")
            
             self._rosbag = None
-            self.subscribe_to_vel_topic()Update discover_lidar.py
+            self.subscribe_to_vel_topic()
             super().__init__() 
 
     def subscribe_to_vel_topic(self):
