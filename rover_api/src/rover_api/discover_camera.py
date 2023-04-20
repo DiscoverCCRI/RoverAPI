@@ -17,7 +17,8 @@ class Camera(Config):
     """
 
     def __init__(self, subscribe=True, callback=None):
-        """ The constructor for the Camera class. 
+        """ 
+        The constructor for the Camera class. 
         
         Sets initial values. for attributes along with subscribing to image 
         topic. Also creates the experimental directories if needed.
@@ -62,8 +63,8 @@ class Camera(Config):
             super().__init__()
 
     def subscribe_to_image_topic(self):
-        """Subscribes to the ROS image topic published from the camera.
-        
+        """
+        Subscribes to the ROS image topic published from the camera.
         If subscribe is set to False, call this function to get data from 
         the camera.
         
@@ -84,8 +85,8 @@ class Camera(Config):
         Subscriber("/camera/image_raw", Image, self.__callback_get_image)
 
     def __callback_get_image(self, message: Image):
-        """A helper function that is used to actually get image data.
-        
+        """
+        A helper function that is used to actually get image data.
         If the start_recording function has been called, this function will
         record image data to a rosbag file. If a callback function has been
         set, this function will call the callback. It appends the latest image
@@ -114,7 +115,8 @@ class Camera(Config):
         self._img_buffer.append(message)
 
     def get_latest_image(self) -> Image:
-        """ A function that returns the latest image in the form of 
+        """ 
+        A function that returns the latest image in the form of 
         a sensor_msgs/Image object.
         
         
@@ -137,7 +139,8 @@ class Camera(Config):
         return self._img_buffer[-1]
 
     def get_jpg(self):
-        """ A function that uses OpenCV's CvBridge to convert a 
+        """ 
+        A function that uses OpenCV's CvBridge to convert a 
         sensor_msgs/Image object to an OpenCV image object, which is then
         saved as an .jpg file in the /experiment/photos directory. Images
         are saved as /experiment/photos/<number_of_image>.jpg.
@@ -175,7 +178,8 @@ class Camera(Config):
         cv2.imwrite(img_str, img)
 
     def start_recording(self):
-        """A function that opens a new rosbag file to record all 
+        """
+        A function that opens a new rosbag file to record all 
         ROS messages published on the /camera/image_raw topic.
         
         Parameters
@@ -196,7 +200,8 @@ class Camera(Config):
         self._bag = Bag(get_time_str(Time.now(), ".bag"), 'w')
 
     def stop_recording(self):
-        """A function that closes a previously opened rosbag file
+        """
+        A function that closes a previously opened rosbag file
         that has records of ROS messages published on the /camera/image_raw
         topic.
         
@@ -221,7 +226,8 @@ class Camera(Config):
         self._bag.close()
 
     def is_available(self) -> bool:
-        """A function that returns whether or not the camera on the 
+        """
+        A function that returns whether or not the camera on the 
         rover is available.
         
         Parameters
@@ -243,7 +249,8 @@ class Camera(Config):
         return super().is_available()
 
     def get_info(self) -> str:
-        """A function that returns information about the camera on the
+        """
+        A function that returns information about the camera on the
         rover.
         
         Parameters
@@ -264,7 +271,8 @@ class Camera(Config):
         return super().get_info()
     
     def set_callback(self, func):
-        """A function that sets the callback function to be called
+        """
+        A function that sets the callback function to be called
         whenever new images from the camera are available. The new callback
         function will not be called unless subscribe is set to True, or 
         subscribe_to_image_topic() has been called.
