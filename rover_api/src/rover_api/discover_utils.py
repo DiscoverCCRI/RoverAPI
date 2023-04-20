@@ -17,11 +17,16 @@ class Config:
     """
 
     def __init__(self):
-        """
-        @brief This constructor sets up the Config class by finding which
+        """This constructor sets up the Config class by finding which
         type of class is extending the config class.
-        @param self: A reference to the current object.
-        @return: None
+        
+        Parameters
+        ----------
+        None
+        
+        Returns
+        -------
+        None
         """
         try:
             init_node("discover")
@@ -39,11 +44,17 @@ class Config:
         elif type_obj == "<class 'rover_api.discover_camera.Camera'>":
             self.sensor_type = "camera"
 
-    def isAvailable(self):
-        """
-        @brief Determines whether or not the given sensor is available.
-        @param self: A reference to the current object.
-        @return: None
+    def is_available(self):
+        """Determines whether or not the given sensor is available.
+        
+        Parameters
+        ----------
+        None
+        
+        Returns
+        -------
+        bool
+            A boolean stating whether or not the sensor is available.
         """
         
         nodes = get_node_names()
@@ -62,12 +73,18 @@ class Config:
 
         return available_flag
         
-    def getInfo(self):
-        """
-        @brief This function returns info about each individual 
-        sensor.
-        @param self: A reference to the current object.
-        @return: None
+    def get_info(self):
+        """Returns information about the given sensor. Information is returned
+        in whatever format the sensor has chosen.
+        
+        Parameters
+        ----------
+        None
+        
+        Returns
+        -------
+        sensor_info
+           The sensor information in an unspecified format.
         """
         if self.sensor_type == "camera":
             Subscriber("/camera/camera_info", CameraInfo, self.
@@ -85,29 +102,50 @@ class Config:
         return self.sensor_info
 
     def _callback_get_info(self, message):
-        """
-        @brief This is a helper function that returns the
-        information about the given sensor.
-        @param self: A reference to the current object.
-        @param message: A ROS message containing the actual
-        sensor info.
-        @return: None
+        """This is a helper function that returns the information about the given sensor.
+        
+        Parameters
+        ----------
+        message : msg
+            A ROS message containing the actual sensor info. The type of ROS message
+            passed in depends on the type of sensor.
+            
+        Returns
+        -------
+        None
         """
         self.sensor_info = message 
 
-# TODO: just make this current time no matter what
+
 def get_time_str(in_time: Time=None, extension: str='') -> str:
     """
-    @brief This function returns the current time this specific
+    This function returns the current time this specific
     format: /experiment/day-month-year_hours:minutes:seconds.
     The prefix /experiment is included so files can be easily
     stored according to the time they were created.
-    @param in_time: The current time according the ROS core.
-    The default value is None.
-    @extension extensions: A string value that should pertain
-    to a file extension. For rosbags it should be .bag, for images
-    it should be .jpg, etc.
-    @return: A string with the formatted time.
+    
+    Parameters
+    ----------
+    in_time : Time 
+        The current time according the ROS core. The default value is None.
+    
+    extension : str
+        A string value that should pertain to a file extension. For rosbags it should be 
+        .bag, for images it should be .jpg, etc.
+    
+    Returns
+    -------
+    str
+        A string with the formatted time.
+    
+    Examples
+    --------
+    >>> from rover_api.discover_utils import get_time_str
+    >>> from rover_api.discover_camera import Camera
+    >>> def cb_func():
+    >>>     print(f"New image at: {get_time_str()}")
+    >>>
+    >>> cam = Camera(callback=cb_func)
     """
     if in_time is not None:
         # convert time to a python datetime object
@@ -121,13 +159,31 @@ def get_time_str(in_time: Time=None, extension: str='') -> str:
 
 
 def finish_experiment():
-    """
-    @brief This function should be called whenever a user 
+    """This function should be called whenever a user 
     experiment is finished. This will call the user's 
     finished callback function, doing whatever cleanup they
     may need. Additionally, this will be called when the rover
     goes into low power mode.
-    @return: None
+    
+    Parameters
+    ----------
+    None
+    
+    Returns
+    -------
+    None
+    
+    Examples
+    --------
+    >>> from rover_api.discover_utils import get_time_str, finish_experiment
+    >>> from rover_api.discover_camera import Camera
+    >>> from rover_api.discover_init import ExperimentInitializer
+    >>> def finished_cb():
+    >>>     print(f"Finished at: {get_time_str()}")
+    >>>
+    >>> initializer = ExperimentInitializer(finished_cb)
+    >>> cam = Camera()
+    >>> finish_experiment()
     """
     pub = Publisher("/finished", Bool, queue_size=10)
     sleep(1)
