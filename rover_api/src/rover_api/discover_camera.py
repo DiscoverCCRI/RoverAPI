@@ -236,9 +236,9 @@ class Camera(Config):
         Examples
         --------
         >>> from rover_api.discover_camera import Camera
-        >>> cam = Camera()
+        >>> cam = Camera(subscribe=False)
         >>> if cam.is_available():
-        >>>     cam.get_jpg()
+        >>>     cam.subscribe_to_image_topic()
         """
         return super().is_available()
 
