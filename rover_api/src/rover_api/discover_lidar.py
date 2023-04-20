@@ -42,32 +42,7 @@ class Lidar(Config):
         Returns
         -------
         None
-       def set_callback(self, func):
-        """A function that sets the callback function to be called
-        whenever new images from the camera are available. The new callback
-        function will not be called unless subscribe is set to True, or 
-        subscribe_to_image_topic() has been called.
-        
-        Parameters
-        ----------
-        func : function
-            The new callback function
-        
-        Returns
-        -------
-        None
-        
-        Examples
-        --------
-        >>> from rover_api.discover_camera import Camera
-        >>> def cb_func():
-        >>>     print("New image published")
-        >>> 
-        >>> cam = Camera(False, None)
-        >>> cam.set_callback(cb_func)
-        >>> cam.subscribe_to_image_topic()
-        """
-        self.callback_func = func 
+       
         Examples
         --------
         >>> from rover_api.discover_lidar import Lidar
@@ -94,7 +69,7 @@ class Lidar(Config):
                 self._pc_pub = Publisher("/pointcloud", PointCloud2, 
                                                                  queue_size=10)
             if subscribe:
-                self.subscribe_to_scan()
+                self.subscribe_to_scan_topic()
             
             if not exists("/experiment"):
                 mkdir("/experiment")
