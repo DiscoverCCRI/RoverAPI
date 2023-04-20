@@ -220,7 +220,7 @@ class Camera(Config):
         self._bag_open = False
         self._bag.close()
 
-    def is_available(self) -> Bool:
+    def is_available(self) -> bool:
         """A function that returns whether or not the camera on the 
         rover is available.
         
