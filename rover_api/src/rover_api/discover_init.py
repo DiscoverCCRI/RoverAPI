@@ -8,7 +8,8 @@ class ExperimentInitializer():
     """
     
     def __init__(self, callback_func=None):
-        """The constructor for the ExperimentInitializer class. 
+        """
+        The constructor for the ExperimentInitializer class. 
         
         It starts up
         the discover ROS node if one is not already in operation. It then sets a
@@ -41,7 +42,9 @@ class ExperimentInitializer():
             self.finished_sub = Subscriber("/finished", Bool, self._callback)
 
     def _callback(self, msg):
-        """A helper callback function for the subscriber created in the class constructor.
+        """
+        
+        A helper callback function for the subscriber created in the class constructor.
         If the boolean passed to this function is True, the experiment is over, so the
         function calls the user's callback function.
         
@@ -58,7 +61,8 @@ class ExperimentInitializer():
             self.callback_func()
      
     def set_callback(self, callback_func):
-        """A function allowing the user to set their callback function at a time other
+        """
+        A function allowing the user to set their callback function at a time other
         than construction of the object.
         
         Parameters
