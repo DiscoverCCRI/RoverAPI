@@ -7,7 +7,7 @@ Welcome to RoverAPI's documentation!
 =========================================
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 5
    :caption: Contents:
 
 .. automodule:: discover_camera
@@ -15,6 +15,7 @@ Welcome to RoverAPI's documentation!
 .. automodule:: discover_init
 .. automodule:: discover_lidar
 .. automodule:: discover_utils
+
 
 Indices and tables
 ==================
