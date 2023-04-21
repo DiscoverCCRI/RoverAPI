@@ -1,0 +1,228 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>discover_utils module &#8212; RoverAPI Docs 1.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/alabaster.css" />
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/sphinx_highlight.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="module-discover_utils">
+<span id="discover-utils-module"></span><h1>discover_utils module<a class="headerlink" href="#module-discover_utils" title="Permalink to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="discover_utils.Config">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">discover_utils.</span></span><span class="sig-name descname"><span class="pre">Config</span></span><a class="headerlink" href="#discover_utils.Config" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>This config class exists only as an abstract class
+through which common functionality between different
+RoverAPI classes is implemented.</p>
+<p class="rubric">Methods</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#discover_utils.Config.get_info" title="discover_utils.Config.get_info"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_info</span></code></a>()</p></td>
+<td><p>Returns information about the given sensor.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#discover_utils.Config.is_available" title="discover_utils.Config.is_available"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_available</span></code></a>()</p></td>
+<td><p>Determines whether or not the given sensor is available.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="discover_utils.Config.get_info">
+<span class="sig-name descname"><span class="pre">get_info</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#discover_utils.Config.get_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns information about the given sensor. Information is returned
+in whatever format the sensor has chosen.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>None</strong></dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>sensor_info</dt><dd><p>The sensor information in an unspecified format.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="discover_utils.Config.is_available">
+<span class="sig-name descname"><span class="pre">is_available</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#discover_utils.Config.is_available" title="Permalink to this definition">¶</a></dt>
+<dd><p>Determines whether or not the given sensor is available.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>None</strong></dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>bool</dt><dd><p>A boolean stating whether or not the sensor is available.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="discover_utils.finish_experiment">
+<span class="sig-prename descclassname"><span class="pre">discover_utils.</span></span><span class="sig-name descname"><span class="pre">finish_experiment</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#discover_utils.finish_experiment" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function should be called whenever a user 
+experiment is finished. This will call the user’s 
+finished callback function, doing whatever cleanup they
+may need. Additionally, this will be called when the rover
+goes into low power mode.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>None</strong></dt><dd></dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>None</dt><dd></dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">rover_api.discover_utils</span> <span class="kn">import</span> <span class="n">get_time_str</span><span class="p">,</span> <span class="n">finish_experiment</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">rover_api.discover_camera</span> <span class="kn">import</span> <span class="n">Camera</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">rover_api.discover_init</span> <span class="kn">import</span> <span class="n">ExperimentInitializer</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">finished_cb</span><span class="p">():</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Finished at: </span><span class="si">{</span><span class="n">get_time_str</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">initializer</span> <span class="o">=</span> <span class="n">ExperimentInitializer</span><span class="p">(</span><span class="n">finished_cb</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cam</span> <span class="o">=</span> <span class="n">Camera</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">finish_experiment</span><span class="p">()</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="discover_utils.get_time_str">
+<span class="sig-prename descclassname"><span class="pre">discover_utils.</span></span><span class="sig-name descname"><span class="pre">get_time_str</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_time</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Time</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">extension</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#discover_utils.get_time_str" title="Permalink to this definition">¶</a></dt>
+<dd><p>This function returns the current time this specific
+format: /experiment/day-month-year_hours:minutes:seconds.
+The prefix /experiment is included so files can be easily
+stored according to the time they were created.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><dl class="simple">
+<dt><strong>in_time</strong><span class="classifier">Time</span></dt><dd><p>The current time according the ROS core. The default value is None.</p>
+</dd>
+<dt><strong>extension</strong><span class="classifier">str</span></dt><dd><p>A string value that should pertain to a file extension. For rosbags it should be 
+.bag, for images it should be .jpg, etc.</p>
+</dd>
+</dl>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><dl class="simple">
+<dt>str</dt><dd><p>A string with the formatted time.</p>
+</dd>
+</dl>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">rover_api.discover_utils</span> <span class="kn">import</span> <span class="n">get_time_str</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">rover_api.discover_camera</span> <span class="kn">import</span> <span class="n">Camera</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">def</span> <span class="nf">cb_func</span><span class="p">():</span>
+<span class="gp">&gt;&gt;&gt; </span>    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;New image at: </span><span class="si">{</span><span class="n">get_time_str</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">cam</span> <span class="o">=</span> <span class="n">Camera</span><span class="p">(</span><span class="n">callback</span><span class="o">=</span><span class="n">cb_func</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<h1 class="logo"><a href="index.html">RoverAPI Docs</a></h1>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2023, Cody Beck.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 6.1.3</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/discover_utils.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
