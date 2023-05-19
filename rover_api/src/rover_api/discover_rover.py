@@ -1,4 +1,6 @@
 from math import radians
+from os.path import exists
+from os import makedirs
 from rospy import Time, init_node, Publisher, Subscriber, get_time, loginfo
 from geometry_msgs.msg import Twist
 from rosbag import Bag
