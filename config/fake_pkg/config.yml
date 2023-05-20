@@ -1,0 +1,12 @@
+device:
+    - type: rover
+    - capabilities: 
+        - lidar
+
+code:
+    - directory: src/main.py
+    - build command: cd src && gcc -Wall hello.c -o hello
+    - dependencies: 
+        - tensorflow
+
+    
