@@ -2,13 +2,16 @@
 import yaml
 import argparse
 import os
-from docker.client import APIClient
+from docker import DockerClient
+from subprocess import run
 
 
 def build_image(pkg: str = None):
-    builder = APIClient()
-    builder.build(os.getcwd(), tag="fake_pkg")
-    #os.remove("Dockerfile")
+    builder = DockerClient("unix:///var/run/docker.sock")
+    builder.images.build(path=os.getcwd(), tag="pkg")
+    pkg = pkg.strip("/")
+    run(f"docker tag pkg localhost:443/{pkg} && docker rmi pkg", shell=True)
+    os.remove("Dockerfile")
 
 
 def write_dockerfile(info: dict = None, pkg: str = None):
