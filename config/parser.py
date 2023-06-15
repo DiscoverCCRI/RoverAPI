@@ -14,7 +14,12 @@ def build_image(pkg: str = None):
     run(f"docker tag placeholder localhost:5000/{pkg}", shell=True)
     sleep(5)
     client.api.remove("placeholder")
-    client.api.push(f'localhost:5000/{pkg}', stream=True, decode=True)
+
+    # For some reason it doesn't work correctly unless the response is saved and printed
+    resp = client.api.push(f'localhost:5000/{pkg}', stream=True, decode=True)
+    for line in resp:
+        print(line)
+    
     os.remove("Dockerfile")
 
 
