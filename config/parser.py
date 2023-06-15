@@ -4,12 +4,15 @@ import argparse
 import os
 import docker
 from subprocess import run
+from time import sleep
 
 
 def build_image(pkg: str = None):
     client = docker.DockerClient("unix:///var/run/docker.sock")
     client.images.build(path=os.getcwd(), tag="placeholder")
+    pkg = pkg.strip("/")
     run(f"docker tag placeholder localhost:5000/{pkg}", shell=True)
+    sleep(5)
     client.api.remove("placeholder")
     client.api.push(f'localhost:5000/{pkg}', stream=True, decode=True)
     os.remove("Dockerfile")
