@@ -7,10 +7,11 @@ from subprocess import run
 
 
 def build_image(pkg: str = None):
-    builder = DockerClient("unix:///var/run/docker.sock")
-    builder.images.build(path=os.getcwd(), tag="pkg")
-    pkg = pkg.strip("/")
-    run(f"docker tag pkg localhost:443/{pkg} && docker rmi pkg", shell=True)
+    client = docker.DockerClient("unix:///var/run/docker.sock")
+    client.images.build(path=os.getcwd(), tag="placeholder")
+    run(f"docker tag placeholder localhost:5000/{pkg}", shell=True)
+    client.api.remove("placeholder")
+    client.api.push(f'localhost:5000/{pkg}', stream=True, decode=True)
     os.remove("Dockerfile")
 
 
