@@ -2,7 +2,7 @@
 import yaml
 import argparse
 import os
-from docker import DockerClient
+import docker
 from subprocess import run
 
 
