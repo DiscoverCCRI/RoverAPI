@@ -55,7 +55,7 @@ docker pull cjb873/sim_image
 #### 2.2 Run
 To run the container, use the command
 ```
-docker run -p 9000:80 -it --name rover_development_container cjb873/sim_image
+docker run -p 9000:80 -it --name rover_development_container cjb873/sim_image:1.0
 ```
 
 Then open your browser and go to `localhost:9000`. You should see the desktop of your container.
