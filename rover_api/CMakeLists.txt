@@ -14,6 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
   cv_bridge
   sensor_msgs
   laser_geometry
+  rospy_message_converter
 )
 
 ## System dependencies are found with CMake's conventions
