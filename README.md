@@ -15,3 +15,9 @@ Next, initialize the [rosdep tool and use it to install all dependencies](http:/
 use 
 ```cd ~/catkin_ws && catkin_make``` 
 to build RoverAPI.
+
+### Warning
+
+When running the RoverAPI on the LeoRovers, the default pi user may not have all of the necessary permissions to do certain operations,
+such as creating the /experiment directory. So, all code should be run using the sudo command, or as the root user. If running as the root
+user, do not forget to run ```source /opt/ros/setup.bash && source /home/pi/catkin_ws/devel/setup.bash```.
