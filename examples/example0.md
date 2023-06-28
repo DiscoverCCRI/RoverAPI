@@ -29,7 +29,7 @@
 
 This code will make use of DiscoverCCRI's [RoverAPI](https://github.com/DiscoverCCRI/RoverAPI), which is designed to make operation of DiscoverCCRI's 
 rovers easy. If you are unfamiliar with the Discover project, please check out our [website](https://discoverccri.org) to learn more. The tutorial 
-assumes that you have already set up a development based on the [previous tutorial](examples/starting.md).
+assumes that you have already set up a development environment based on the [previous tutorial](examples/starting.md).
 <p>&nbsp;</p><p>&nbsp;</p>
 
 
