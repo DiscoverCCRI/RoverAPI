@@ -36,7 +36,7 @@ assumes that you have already set up a development environment based on the [pre
 <div id="2"></div>
 
 ### 2. The Code
-For this tutorial, we will write a simple python script that will make use of the rover's movement, camera, and lidar capabilities. We will direct the rover to drive alone a fixed path, take photos at regular intervals, and record laser scan data from the lidar.
+For this tutorial, we will write a simple python script that will make use of the rover's movement, camera, and lidar capabilities. We will direct the rover to drive along a fixed path, take photos at regular intervals, and record laser scan data from the lidar.
 
 <p>&nbsp;</p>
 <p>&nbsp;</p>
@@ -135,7 +135,7 @@ First, we will instantiate the objects to actually access and control the rover'
 lidar.start_recording()
 ```
 Next, we will start recording the data from the lidar. The data will be saved to a [rosbag](http://wiki.ros.org/rosbag). If you are unfamiliar with [ROS](https://ros.org),
-that is alright. Nothing in this API requires you to know ROS, and in the future, we will save the lidar data to a more common format.
+that is alright. Nothing in this API requires you to know ROS, and in the future, we will save the lidar data in a more common format.
 <p>&nbsp;</p>
 
 ```
@@ -167,6 +167,6 @@ Next, we will direct the lidar to stop recording. This will save the rosbag file
 # finish the experiment
 finish_experiment()
 ```
-Finally, we will tell the system that you are finished running your experiment. This allows the system to shut down the docker container that our 
+Finally, we will tell the system that we are finished running our experiment. This allows the system to shut down the docker container that our 
 code is running in, and saves the `/experiment` container with all of our data.
 <p>&nbsp;</p>
