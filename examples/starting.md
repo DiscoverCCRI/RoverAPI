@@ -46,7 +46,7 @@ to allow for easy access.
 #### 2.1 Installation
 To install the docker container, simply run:
 ```
-docker pull cjb873/sim_image
+docker pull cjb873/sim_image:1.0
 ```
 <p>&nbsp;</p><p>&nbsp;</p>
 
