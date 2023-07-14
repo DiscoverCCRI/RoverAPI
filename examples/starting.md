@@ -34,10 +34,10 @@ need to have installed [docker](https://www.docker.com/) on a Linux or MacOS dev
 <div id="2"></div>
 
 ### 2. Setup
-The DiscoverCCRI rover team has created a containerized development environment allowing for users to easily run and test scripts that utilize our 
+The DiscoverCCRI rover team has created a containerized simulation development environment allowing for users to easily run and test scripts that utilize our 
 rovers. The development environment contains: [ROS](https://ros.org), the software suite that make controlling the rovers possible;
 [Gazebo](https://gazebosim.org/home), a 3D robotics simulator; and all required dependencies to make DiscoverCCRI's 
-[RoverAPI](https://github.com/DiscoverCCRI/RoverAPI) work. The development enviroment is deployed in a docker container, and uses noVNC
+[RoverAPI](https://github.com/DiscoverCCRI/RoverAPI) work. The development environment is deployed in a docker container, and uses noVNC
 to allow for easy access.
 <p>&nbsp;</p><p>&nbsp;</p>
 
