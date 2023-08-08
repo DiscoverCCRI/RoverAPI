@@ -1,4 +1,4 @@
-from rospy import Subscriber, init_node, loginfo
+from rospy import Subscriber, init_node, loginfo, get_rostime
 import roslaunch
 from visualization_msgs.msg import Marker
 
@@ -87,13 +87,7 @@ class Tracker():
         if self.callback_func is not None:
             self.callback_func()
 
-        if message is not None:
-
-            self.markers = message
-            self.marker_visible = True
-
-        else:
-            self.marker_visible = False
+        self.marker = message
 
     def get_marker_visible(self) -> bool:
         """
@@ -115,7 +109,12 @@ class Tracker():
         >>> tracker = Tracker()
         >>> is_visible = tracker.get_marker_visible()
         """
-        return self.marker_visible
+
+        if self.marker is None:
+            return False
+
+        return (self.marker.header.stamp.to_sec() -
+                get_rostime().to_sec()) >= -0.4
 
     def get_marker_distance(self) -> float:
         """
@@ -130,6 +129,7 @@ class Tracker():
         -------
         float
             The distance that the ARTag marker is from the camera in meters.
+            Returns -1 if no ARTag marker is in the image.
 
         Examples
         --------
@@ -138,10 +138,10 @@ class Tracker():
         >>> if tracker.get_marker_visible():
         >>>     print(tracker.get_marker_distance())
         """
-        if self.marker_visible:
+        if self.get_marker_visible():
             return self.marker.pose.position.z
 
-        return None
+        return -1
 
     def get_marker_id(self) -> int:
         """
@@ -155,7 +155,8 @@ class Tracker():
         Returns
         -------
         int
-            The ID of the ARTag marker as a value between 0 and 17.
+            The ID of the ARTag marker as a value between 0 and 17. Returns -1
+            if no ARTag marker is in the image.
 
         Examples
         --------
@@ -164,7 +165,7 @@ class Tracker():
         >>> if tracker.get_marker_visible():
         >>>     print(tracker.get_marker_id())
         """
-        if self.marker_visible:
+        if self.get_marker_visible():
             return self.marker.id
 
-        return None
+        return -1
