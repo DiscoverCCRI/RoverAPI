@@ -15,6 +15,7 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   laser_geometry
   rospy_message_converter
+  ar_track_alvar
 )
 
 ## System dependencies are found with CMake's conventions
