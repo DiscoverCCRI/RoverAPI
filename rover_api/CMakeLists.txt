@@ -16,6 +16,7 @@ find_package(catkin REQUIRED COMPONENTS
   laser_geometry
   rospy_message_converter
   ar_track_alvar
+  rplidar_ros
 )
 
 ## System dependencies are found with CMake's conventions
