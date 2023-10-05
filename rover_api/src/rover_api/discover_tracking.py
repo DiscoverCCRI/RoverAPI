@@ -118,8 +118,8 @@ class Tracker():
 
     def get_marker_distance(self) -> float:
         """
-        A function that returns the distance that the marker is from the camera
-        . If no marker is visible, returns None.
+        A function that returns the distance that the marker is from the camera. 
+        If no marker is visible, returns None.
 
         Parameters
         ----------
