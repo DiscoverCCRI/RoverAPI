@@ -4,7 +4,6 @@ from sensor_msgs.msg import NatSavFix
 from subprocess import run
 from rover_api.discover_utils import get_time_str
 
-
 class GPS:
 
     def __init__(self):
@@ -13,7 +12,6 @@ class GPS:
         finally:
             self.__subscribe_to_gps()
             self._fix_buffer = []
-
             sleep(1)
 
     def __subscribe_to_gps(self):
